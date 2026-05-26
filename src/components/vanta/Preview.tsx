@@ -5,7 +5,7 @@ import {
   Play, Pause, Volume2, Mic, Send, Sparkles, Sun, Moon, Copy,
   ArrowRight, ArrowUpRight, Plus, X, Info, AlertTriangle, CheckCircle2,
   XCircle, Loader2, MoreHorizontal, Calendar as CalendarIcon, Clock,
-  Upload, MapPin, Github, Twitter, Mail, Lock, Eye, EyeOff, Trash2,
+  Upload as UploadIcon, MapPin, Github, Twitter, Mail, Lock, Eye, EyeOff, Trash2,
   Edit3, ExternalLink, GripVertical, Filter,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
@@ -907,7 +907,7 @@ function Upload({ variant }: { variant: V }) {
     return (
       <Stage>
         <div className="border-2 border-dashed border-hairline rounded-xl w-full max-w-md p-8 text-center bg-canvas-soft">
-          <Upload className="h-6 w-6 mx-auto text-mute"/>
+          <UploadIcon className="h-6 w-6 mx-auto text-mute"/>
           <div className="text-sm mt-2">Drop files here or <span className="text-link">browse</span></div>
           <div className="text-xs text-mute mt-1">PNG, JPG up to 10MB</div>
         </div>
