@@ -26,7 +26,7 @@ function ComponentsIndex() {
       <div className="flex items-end justify-between gap-4 flex-wrap">
         <div>
           <h1 className="text-4xl font-medium tracking-tight">Components</h1>
-          <p className="text-body mt-2">{COMPONENTS.length} components, accessible and themable.</p>
+          <p className="text-body mt-2">{COMPONENTS.length}+ components — accessible, themable, copy-paste ready.</p>
         </div>
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-mute" />
