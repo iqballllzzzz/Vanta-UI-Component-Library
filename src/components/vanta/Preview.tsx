@@ -6,7 +6,10 @@ import {
   ArrowRight, ArrowUpRight, Plus, X, Info, AlertTriangle, CheckCircle2,
   XCircle, Loader2, MoreHorizontal, Calendar as CalendarIcon, Clock,
   Upload as UploadIcon, MapPin, Github, Twitter, Mail, Lock, Eye, EyeOff, Trash2,
-  Edit3, ExternalLink, GripVertical, Filter,
+  Edit3, ExternalLink, GripVertical, Filter, Zap, Brain, Bot, Cpu, Globe,
+  TrendingUp, TrendingDown, BarChart3, Activity, MessageSquare, Sticker, Smile,
+  Quote, Wand2, Database, Code2, GitBranch, Terminal as TerminalIcon, Layers,
+  Shield, Award, Flame, Rocket, Gift, ThumbsUp,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
