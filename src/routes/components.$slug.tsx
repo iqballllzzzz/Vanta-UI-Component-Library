@@ -2,7 +2,8 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useState } from "react";
 import { findComponent, COMPONENTS } from "@/lib/components-data";
 import { Preview } from "@/components/vanta/Preview";
-import { Copy, Check, Smartphone, Tablet, Monitor, ArrowLeft } from "lucide-react";
+import { Copy, Check, Smartphone, Tablet, Monitor, ArrowLeft, Code2 } from "lucide-react";
+import { slugify } from "@/lib/slug";
 
 export const Route = createFileRoute("/components/$slug")({
   head: ({ params }) => {
@@ -18,8 +19,18 @@ export const Route = createFileRoute("/components/$slug")({
   notFoundComponent: () => <div className="mx-auto max-w-3xl p-12 text-center text-body">Component not found.</div>,
 });
 
-function CopyBtn({ text }: { text: string }) {
+function CopyBtn({ text, large }: { text: string; large?: boolean }) {
   const [c, setC] = useState(false);
+  if (large) {
+    return (
+      <button
+        onClick={() => { navigator.clipboard?.writeText(text); setC(true); setTimeout(() => setC(false), 1500); }}
+        className="inline-flex items-center gap-2 h-10 px-4 rounded-md bg-ink text-white text-sm hover:bg-ink/90 transition"
+      >
+        {c ? <><Check className="h-4 w-4" />Copied to clipboard</> : <><Copy className="h-4 w-4" />Copy code</>}
+      </button>
+    );
+  }
   return (
     <button
       onClick={() => { navigator.clipboard?.writeText(text); setC(true); setTimeout(() => setC(false), 1200); }}
@@ -40,16 +51,27 @@ function ComponentDetail() {
   if (!c) throw notFound();
 
   const related = COMPONENTS.filter((x) => x.category === c.category && x.slug !== c.slug).slice(0, 4);
+  const variants = COMPONENTS.filter((x) => x.kind === c.kind && x.slug !== c.slug).slice(0, 6);
   const deviceW: Record<string, string> = { mobile: "max-w-[375px]", tablet: "max-w-[768px]", desktop: "max-w-full" };
 
   return (
     <div className="mx-auto max-w-5xl px-5 py-12">
       <Link to="/components" className="text-sm text-mute inline-flex items-center gap-1 hover:text-ink"><ArrowLeft className="h-4 w-4" /> All components</Link>
-      <div className="mt-3 flex items-baseline gap-3 flex-wrap">
-        <h1 className="text-4xl font-medium tracking-tight">{c.name}</h1>
-        <span className="text-[10px] font-mono uppercase text-mute bg-canvas-soft px-2 py-0.5 rounded-full">{c.category}</span>
+      <div className="mt-3 flex items-start gap-4 flex-wrap justify-between">
+        <div>
+          <div className="flex items-baseline gap-3 flex-wrap">
+            <h1 className="text-4xl font-medium tracking-tight">{c.name}</h1>
+            <Link
+              to="/components/category/$category"
+              params={{ category: slugify(c.category) }}
+              className="text-[10px] font-mono uppercase text-mute bg-canvas-soft px-2 py-0.5 rounded-full hover:text-ink"
+            >{c.category}</Link>
+            {c.isNew && <span className="text-[10px] font-mono uppercase text-link bg-link/10 px-2 py-0.5 rounded-full">NEW</span>}
+          </div>
+          <p className="text-body mt-2">{c.description}</p>
+        </div>
+        <CopyBtn text={c.code ?? ""} large />
       </div>
-      <p className="text-body mt-2">{c.description}</p>
 
       {/* Tabs */}
       <div className="mt-8 flex gap-6 border-b border-hairline">
@@ -85,6 +107,29 @@ function ComponentDetail() {
           </div>
         )}
       </div>
+
+      {/* Variants of same kind */}
+      {variants.length > 0 && (
+        <section className="mt-12">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-medium">Variants</h2>
+            <span className="text-xs text-mute">{variants.length} more variants of this component</span>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-4">
+            {variants.map((v) => (
+              <Link key={v.slug} to="/components/$slug" params={{ slug: v.slug }} className="block group">
+                <div className="border border-hairline rounded-lg overflow-hidden bg-canvas">
+                  <div className="scale-90 origin-center"><Preview kind={v.kind} variant={v.variant} /></div>
+                  <div className="p-2.5 border-t border-hairline flex items-center justify-between">
+                    <div className="text-xs font-medium text-ink">{v.name}</div>
+                    <Code2 className="h-3.5 w-3.5 text-mute group-hover:text-ink" />
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Install */}
       <section className="mt-12">
