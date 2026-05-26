@@ -1851,7 +1851,8 @@ function Gauge() {
 
 // ---------- CALENDAR HEATMAP ----------
 function CalendarHeat() {
-  const cells = Array.from({ length: 7 * 16 }, () => Math.floor(Math.random() * 5));
+  // Deterministic pseudo-random pattern so SSR + client render identically.
+  const cells = Array.from({ length: 7 * 16 }, (_, i) => (i * 31 + 7) % 5);
   const shades = ["bg-canvas-soft", "bg-[#0070f3]/20", "bg-[#0070f3]/40", "bg-[#0070f3]/70", "bg-[#0070f3]"];
   return (
     <Stage>
