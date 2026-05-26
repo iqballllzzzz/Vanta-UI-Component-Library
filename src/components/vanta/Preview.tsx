@@ -1538,6 +1538,741 @@ function Logo() {
   return <Stage><div className="flex items-center gap-2 text-2xl"><span className="font-mono">▲</span><span className="font-medium tracking-tight">Vanta UI</span></div></Stage>;
 }
 
+// ============== NEW RENDERERS (v2) ==============
+
+// ---------- AI PROFILE ----------
+function AIProfile({ variant }: { variant: V }) {
+  const personas: Record<string, { name: string; role: string; bio: string; tags: string[]; grad: string }> = {
+    default: { name: "Atlas", role: "Research Assistant", bio: "Multi-modal reasoning agent with web access and citation grounding.", tags: ["GPT-5", "Web", "Citations"], grad: "linear-gradient(135deg,#7928ca,#ff0080)" },
+    coder: { name: "Hex", role: "Code Companion", bio: "Pair-programmer fine-tuned on 2.3T tokens of source code across 60+ languages.", tags: ["Code", "Refactor", "Tests"], grad: "linear-gradient(135deg,#0070f3,#00dfd8)" },
+    designer: { name: "Nova", role: "Design Partner", bio: "Generative design lead. Storyboards, moodboards, brand systems.", tags: ["Figma", "Brand", "UX"], grad: "linear-gradient(135deg,#ff0080,#ff8a00)" },
+    writer: { name: "Prose", role: "Editorial AI", bio: "Long-form writing with house-style enforcement and tone control.", tags: ["Long-form", "SEO", "Tone"], grad: "linear-gradient(135deg,#10b981,#0070f3)" },
+    analyst: { name: "Quant", role: "Data Analyst", bio: "SQL, dataframes, charting. Connects to your warehouse over read-only.", tags: ["SQL", "Charts", "BI"], grad: "linear-gradient(135deg,#f5a623,#ff0080)" },
+  };
+  const p = personas[variant ?? "default"] ?? personas.default;
+  return (
+    <Stage>
+      <div className="w-full max-w-sm rounded-2xl border border-hairline bg-canvas p-5 card-elev">
+        <div className="flex items-start gap-4">
+          <div className="relative">
+            <div className="h-14 w-14 rounded-2xl grid place-items-center text-white text-lg font-medium" style={{ backgroundImage: p.grad }}>
+              <Bot className="h-7 w-7" />
+            </div>
+            <span className="absolute -bottom-1 -right-1 h-4 w-4 rounded-full bg-success border-2 border-canvas" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2">
+              <div className="text-base font-medium text-ink truncate">{p.name}</div>
+              <span className="text-[10px] font-mono uppercase text-mute bg-canvas-soft px-1.5 py-0.5 rounded">AI</span>
+            </div>
+            <div className="text-xs text-mute">{p.role}</div>
+          </div>
+          <button className="h-7 px-2 rounded-md border border-hairline text-xs text-body">Edit</button>
+        </div>
+        <p className="text-sm text-body mt-3 leading-relaxed">{p.bio}</p>
+        <div className="flex flex-wrap gap-1.5 mt-3">
+          {p.tags.map((t) => <span key={t} className="text-[11px] font-mono px-2 py-0.5 rounded-full border border-hairline text-body">{t}</span>)}
+        </div>
+        <div className="flex gap-2 mt-4">
+          <button className="flex-1 h-9 rounded-md bg-ink text-white text-sm inline-flex items-center justify-center gap-1.5"><MessageSquare className="h-4 w-4"/>Chat</button>
+          <button className="h-9 px-3 rounded-md border border-hairline text-sm">Configure</button>
+        </div>
+      </div>
+    </Stage>
+  );
+}
+
+// ---------- AI AGENT (status card) ----------
+function AIAgent({ variant }: { variant: V }) {
+  const status = variant ?? "running";
+  const map: any = {
+    running: { dot: "bg-success animate-pulse", label: "Running", color: "text-success" },
+    idle: { dot: "bg-mute", label: "Idle", color: "text-mute" },
+    error: { dot: "bg-destructive", label: "Failed", color: "text-destructive" },
+    queued: { dot: "bg-warning animate-pulse", label: "Queued", color: "text-warning" },
+  };
+  const s = map[status] ?? map.running;
+  return (
+    <Stage>
+      <div className="w-full max-w-md rounded-xl border border-hairline bg-canvas p-4">
+        <div className="flex items-center gap-3">
+          <div className="h-10 w-10 rounded-lg bg-canvas-soft grid place-items-center"><Cpu className="h-5 w-5 text-ink"/></div>
+          <div className="flex-1">
+            <div className="text-sm font-medium text-ink">scrape-prices.agent</div>
+            <div className="text-xs text-mute">Step 4/7 · Extracting tabular data</div>
+          </div>
+          <span className={`inline-flex items-center gap-1.5 text-xs ${s.color}`}>
+            <span className={`h-2 w-2 rounded-full ${s.dot}`}/>{s.label}
+          </span>
+        </div>
+        <div className="mt-3 h-1.5 w-full bg-canvas-soft rounded-full overflow-hidden">
+          <div className="h-full bg-ink" style={{ width: "57%" }}/>
+        </div>
+        <div className="flex justify-between mt-2 text-[11px] font-mono text-mute">
+          <span>1,284 tokens</span><span>$0.0042</span><span>4.1s elapsed</span>
+        </div>
+      </div>
+    </Stage>
+  );
+}
+
+// ---------- AI PERSONA SWITCHER ----------
+function AIPersona() {
+  const items = [
+    { n: "Atlas", c: "#7928ca" }, { n: "Hex", c: "#0070f3" }, { n: "Nova", c: "#ff0080" }, { n: "Prose", c: "#10b981" },
+  ];
+  return (
+    <Stage>
+      <div className="flex gap-2">
+        {items.map((p, i) => (
+          <button key={p.n} className={`px-3 py-2 rounded-xl border ${i === 0 ? "border-ink bg-canvas" : "border-hairline"} flex items-center gap-2`}>
+            <span className="h-6 w-6 rounded-full grid place-items-center text-white text-[10px]" style={{ background: p.c }}><Bot className="h-3.5 w-3.5"/></span>
+            <span className="text-xs text-ink">{p.n}</span>
+          </button>
+        ))}
+      </div>
+    </Stage>
+  );
+}
+
+// ---------- AI PROMPT CARD ----------
+function AIPromptCard({ variant }: { variant: V }) {
+  const v = variant ?? "default";
+  const data: any = {
+    default: { icon: Wand2, title: "Summarize a meeting", body: "Turn meeting transcripts into action items and decisions.", tag: "Productivity" },
+    code: { icon: Code2, title: "Explain this code", body: "Walks through any pasted snippet line-by-line.", tag: "Coding" },
+    seo: { icon: Globe, title: "Write SEO meta", body: "Generate title + description from a URL.", tag: "Marketing" },
+    image: { icon: ImageIcon, title: "Brand mood board", body: "Generate 9 image variations from a single concept.", tag: "Design" },
+  };
+  const d = data[v] ?? data.default;
+  const Icon = d.icon;
+  return (
+    <Stage>
+      <div className="w-full max-w-sm rounded-xl border border-hairline bg-canvas p-4 hover:border-hairline-strong transition">
+        <div className="flex items-start gap-3">
+          <div className="h-9 w-9 rounded-md bg-canvas-soft grid place-items-center"><Icon className="h-5 w-5 text-ink"/></div>
+          <div className="flex-1">
+            <div className="text-sm font-medium text-ink">{d.title}</div>
+            <div className="text-xs text-body mt-1">{d.body}</div>
+          </div>
+        </div>
+        <div className="flex items-center justify-between mt-3">
+          <span className="text-[10px] font-mono uppercase text-mute">{d.tag}</span>
+          <button className="text-xs text-link inline-flex items-center gap-1">Use template <ArrowRight className="h-3 w-3"/></button>
+        </div>
+      </div>
+    </Stage>
+  );
+}
+
+// ---------- AI TOOL CALL ----------
+function AIToolCall() {
+  return (
+    <Stage>
+      <div className="w-full max-w-md rounded-lg border border-hairline bg-canvas-soft overflow-hidden font-mono text-xs">
+        <div className="px-3 py-2 border-b border-hairline flex items-center gap-2 text-mute">
+          <Wand2 className="h-3.5 w-3.5"/> tool_call · search_web
+        </div>
+        <pre className="px-3 py-2 text-body whitespace-pre">{`{
+  "query": "vercel design system",
+  "top_k": 5
+}`}</pre>
+        <div className="px-3 py-1.5 border-t border-hairline text-success">✓ 5 results · 312 ms</div>
+      </div>
+    </Stage>
+  );
+}
+
+// ---------- AI CITATION ----------
+function AICitation() {
+  const sources = [
+    { n: "vercel.com/design", q: "Geist is our typeface…" },
+    { n: "nextjs.org/docs", q: "App Router conventions…" },
+    { n: "tailwindcss.com", q: "Utility-first CSS…" },
+  ];
+  return (
+    <Stage>
+      <div className="w-full max-w-md space-y-2">
+        {sources.map((s, i) => (
+          <div key={s.n} className="flex items-start gap-2 border border-hairline rounded-md p-2 bg-canvas">
+            <span className="h-5 w-5 grid place-items-center rounded text-[10px] font-mono bg-ink text-white">{i+1}</span>
+            <div className="flex-1 min-w-0">
+              <div className="text-xs text-link truncate">{s.n}</div>
+              <div className="text-xs text-body italic truncate">"{s.q}"</div>
+            </div>
+            <ExternalLink className="h-3.5 w-3.5 text-mute"/>
+          </div>
+        ))}
+      </div>
+    </Stage>
+  );
+}
+
+// ---------- AI SUGGESTION CHIPS ----------
+function AISuggestion() {
+  return (
+    <Stage>
+      <div className="w-full max-w-md">
+        <div className="text-xs text-mute mb-2">Try asking</div>
+        <div className="flex flex-wrap gap-2">
+          {["Summarize this thread", "Draft a reply", "Find similar issues", "Translate to Indonesian", "Make it shorter"].map(s => (
+            <button key={s} className="text-xs px-3 py-1.5 rounded-full bg-canvas-soft border border-hairline text-body hover:text-ink">{s}</button>
+          ))}
+        </div>
+      </div>
+    </Stage>
+  );
+}
+
+// ---------- AI MODEL PICKER ----------
+function AIModelPicker() {
+  const models = [
+    { n: "GPT-5", d: "Multi-modal · 1M ctx", sel: true },
+    { n: "Claude Sonnet 4.5", d: "Reasoning · 200K ctx", sel: false },
+    { n: "Gemini 2.5 Pro", d: "Fast · 2M ctx", sel: false },
+  ];
+  return (
+    <Stage>
+      <div className="w-full max-w-sm rounded-xl border border-hairline bg-canvas p-2 space-y-1">
+        {models.map(m => (
+          <button key={m.n} className={`w-full flex items-center gap-3 p-2 rounded-md ${m.sel ? "bg-canvas-soft" : ""} hover:bg-canvas-soft`}>
+            <div className="h-8 w-8 rounded-md bg-ink text-white grid place-items-center"><Sparkles className="h-4 w-4"/></div>
+            <div className="flex-1 text-left">
+              <div className="text-sm text-ink">{m.n}</div>
+              <div className="text-[11px] text-mute">{m.d}</div>
+            </div>
+            {m.sel && <Check className="h-4 w-4 text-success"/>}
+          </button>
+        ))}
+      </div>
+    </Stage>
+  );
+}
+
+// ---------- AI STREAMING ----------
+function AIStream() {
+  return (
+    <Stage>
+      <div className="w-full max-w-md p-4 rounded-xl bg-canvas-soft border border-hairline">
+        <div className="flex items-center gap-2 mb-2">
+          <Bot className="h-4 w-4 text-link"/><span className="text-xs font-medium text-ink">Atlas</span>
+          <span className="text-[10px] text-mute font-mono">streaming…</span>
+        </div>
+        <p className="text-sm text-body leading-relaxed">
+          Vanta UI is a component library inspired by Vercel's design language. It ships with 400+ components<span className="inline-block w-1.5 h-4 bg-ink ml-0.5 -mb-0.5 animate-pulse"/>
+        </p>
+      </div>
+    </Stage>
+  );
+}
+
+// ---------- AI MEMORY ----------
+function AIMemory() {
+  return (
+    <Stage>
+      <div className="w-full max-w-md space-y-2">
+        {["User prefers concise, no preamble.", "Working on Vanta UI (Vercel-style).", "Indonesian + English bilingual."].map((m, i) => (
+          <div key={i} className="flex items-center gap-2 p-2 rounded-md border border-hairline bg-canvas">
+            <Brain className="h-4 w-4 text-violet shrink-0"/>
+            <div className="text-xs text-body flex-1 truncate">{m}</div>
+            <button className="text-mute hover:text-destructive"><Trash2 className="h-3.5 w-3.5"/></button>
+          </div>
+        ))}
+      </div>
+    </Stage>
+  );
+}
+
+// ---------- AI TOKEN USAGE ----------
+function AITokenUsage() {
+  return (
+    <Stage>
+      <div className="w-full max-w-sm rounded-xl border border-hairline bg-canvas p-4">
+        <div className="flex justify-between items-baseline">
+          <div className="text-xs text-mute font-mono uppercase">Tokens used</div>
+          <div className="text-xs text-mute">147,820 / 200,000</div>
+        </div>
+        <div className="mt-2 h-2 w-full bg-canvas-soft rounded-full overflow-hidden">
+          <div className="h-full" style={{ width: "73.9%", backgroundImage: "linear-gradient(90deg,#7928ca,#ff0080)" }}/>
+        </div>
+        <div className="grid grid-cols-3 gap-3 mt-4 text-center">
+          {[["In", "98K"], ["Out", "49K"], ["Cost", "$2.81"]].map(([k,v]) => (
+            <div key={k}><div className="text-lg font-medium text-ink tabular-nums">{v}</div><div className="text-[10px] text-mute uppercase font-mono">{k}</div></div>
+          ))}
+        </div>
+      </div>
+    </Stage>
+  );
+}
+
+// ---------- KPI TILE ----------
+function KPITile({ variant }: { variant: V }) {
+  const map: any = {
+    blue:   { c: "#0070f3", icon: TrendingUp, label: "Revenue", val: "$48,210", d: "+12.4%" },
+    violet: { c: "#7928ca", icon: Activity, label: "Sessions", val: "12,481", d: "+8.1%" },
+    pink:   { c: "#ff0080", icon: Flame, label: "Engagement", val: "67%", d: "+2.3%" },
+    cyan:   { c: "#00dfd8", icon: Zap, label: "Latency", val: "82 ms", d: "-14%" },
+    amber:  { c: "#f5a623", icon: Award, label: "NPS", val: "72", d: "+5" },
+    green:  { c: "#10b981", icon: ThumbsUp, label: "CSAT", val: "94%", d: "+1.1%" },
+  };
+  const k = map[variant ?? "blue"] ?? map.blue;
+  const Icon = k.icon;
+  return (
+    <Stage>
+      <div className="w-full max-w-xs rounded-2xl p-5 text-white relative overflow-hidden" style={{ backgroundColor: k.c }}>
+        <div className="absolute -right-6 -bottom-6 h-32 w-32 rounded-full opacity-20 bg-white"/>
+        <div className="flex items-center gap-2 text-white/80 text-xs uppercase font-mono">
+          <Icon className="h-4 w-4"/>{k.label}
+        </div>
+        <div className="mt-2 text-4xl font-medium tabular-nums">{k.val}</div>
+        <div className="mt-1 text-xs text-white/80">{k.d} vs last week</div>
+      </div>
+    </Stage>
+  );
+}
+
+// ---------- GAUGE ----------
+function Gauge() {
+  const pct = 76;
+  const r = 36, c = 2 * Math.PI * r;
+  return (
+    <Stage>
+      <div className="relative">
+        <svg width="120" height="120" viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r={r} fill="none" stroke="var(--hairline)" strokeWidth="8"/>
+          <circle cx="50" cy="50" r={r} fill="none" stroke="url(#g)" strokeWidth="8" strokeLinecap="round" strokeDasharray={`${(pct/100)*c} ${c}`} transform="rotate(-90 50 50)"/>
+          <defs><linearGradient id="g"><stop stopColor="#0070f3"/><stop offset="1" stopColor="#00dfd8"/></linearGradient></defs>
+        </svg>
+        <div className="absolute inset-0 grid place-items-center text-xl font-medium tabular-nums text-ink">{pct}%</div>
+      </div>
+    </Stage>
+  );
+}
+
+// ---------- CALENDAR HEATMAP ----------
+function CalendarHeat() {
+  const cells = Array.from({ length: 7 * 16 }, () => Math.floor(Math.random() * 5));
+  const shades = ["bg-canvas-soft", "bg-[#0070f3]/20", "bg-[#0070f3]/40", "bg-[#0070f3]/70", "bg-[#0070f3]"];
+  return (
+    <Stage>
+      <div className="grid grid-rows-7 grid-flow-col gap-1">
+        {cells.map((v, i) => <div key={i} className={`h-3 w-3 rounded-sm ${shades[v]}`}/>)}
+      </div>
+    </Stage>
+  );
+}
+
+// ---------- SOCIAL CARD ----------
+function SocialCard() {
+  return (
+    <Stage>
+      <div className="w-full max-w-md rounded-xl border border-hairline bg-canvas p-4">
+        <div className="flex items-start gap-3">
+          <div className="h-10 w-10 rounded-full bg-ink text-white grid place-items-center text-xs font-medium">MS</div>
+          <div className="flex-1">
+            <div className="flex items-center gap-1 text-sm">
+              <span className="font-medium text-ink">M Iqbal S</span>
+              <span className="text-mute">@miqbal · 2h</span>
+            </div>
+            <p className="text-sm text-ink mt-1">Just shipped Vanta UI — 400+ components, fully themed, accessible, and free. Built with TanStack Start. Cmd+K it. ▲</p>
+            <div className="flex gap-6 mt-3 text-mute text-xs">
+              <span className="inline-flex items-center gap-1"><MessageSquare className="h-3.5 w-3.5"/> 42</span>
+              <span className="inline-flex items-center gap-1"><GitBranch className="h-3.5 w-3.5"/> 128</span>
+              <span className="inline-flex items-center gap-1"><Heart className="h-3.5 w-3.5"/> 1.2k</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Stage>
+  );
+}
+
+// ---------- BLOG CARD ----------
+function BlogCard() {
+  return (
+    <Stage>
+      <div className="w-full max-w-sm rounded-xl border border-hairline bg-canvas overflow-hidden">
+        <div className="h-32 mesh-bg"/>
+        <div className="p-4">
+          <div className="text-[10px] font-mono uppercase text-mute">Engineering · 6 min read</div>
+          <h3 className="text-base font-medium text-ink mt-1">Shipping a 400-component library in a weekend</h3>
+          <p className="text-xs text-body mt-1">A retrospective on speed, scope, and saying no to ornament.</p>
+          <div className="flex items-center gap-2 mt-3">
+            <div className="h-6 w-6 rounded-full bg-ink"/>
+            <span className="text-xs text-body">M Iqbal S</span>
+          </div>
+        </div>
+      </div>
+    </Stage>
+  );
+}
+
+// ---------- COMMENT THREAD ----------
+function CommentThread() {
+  return (
+    <Stage>
+      <div className="w-full max-w-md space-y-3">
+        {[
+          { n: "Lee", t: "Love the new dark mode. Persistence works flawlessly across pages.", a: "L" },
+          { n: "Indri", t: "Can we get a calendar heatmap variant in green?", a: "I" },
+        ].map((c, i) => (
+          <div key={i} className="flex gap-3">
+            <div className="h-8 w-8 rounded-full bg-canvas-soft grid place-items-center text-xs">{c.a}</div>
+            <div className="flex-1 bg-canvas-soft rounded-lg p-2">
+              <div className="text-xs font-medium text-ink">{c.n}</div>
+              <div className="text-xs text-body">{c.t}</div>
+              <div className="flex gap-3 mt-1 text-[11px] text-mute">
+                <button>Reply</button><button>Like</button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </Stage>
+  );
+}
+
+// ---------- REVIEW CARD ----------
+function ReviewCard() {
+  return (
+    <Stage>
+      <div className="w-full max-w-sm rounded-xl border border-hairline bg-canvas p-4">
+        <div className="flex">{[1,2,3,4,5].map(i => <Star key={i} className="h-4 w-4 fill-warning text-warning"/>)}</div>
+        <h4 className="text-sm font-medium text-ink mt-2">Best dev DX I've had in 2026</h4>
+        <p className="text-xs text-body mt-1">"Cmd+K, fuzzy search, themed, accessible. Shipped a landing page in 90 minutes."</p>
+        <div className="flex items-center gap-2 mt-3">
+          <div className="h-7 w-7 rounded-full bg-canvas-soft"/>
+          <div><div className="text-xs text-ink">Sara K.</div><div className="text-[10px] text-mute">Lead Engineer · Vercel</div></div>
+        </div>
+      </div>
+    </Stage>
+  );
+}
+
+// ---------- LOG VIEWER ----------
+function LogViewer() {
+  const rows = [
+    { l: "INFO", c: "text-link", m: "Booted in 142ms" },
+    { l: "WARN", c: "text-warning", m: "Slow query: SELECT * FROM users" },
+    { l: "INFO", c: "text-link", m: "Cache hit ratio 94%" },
+    { l: "ERROR", c: "text-destructive", m: "Failed to fetch upstream (502)" },
+    { l: "INFO", c: "text-link", m: "Retry succeeded after 3 attempts" },
+  ];
+  return (
+    <Stage>
+      <div className="w-full max-w-md bg-[#0a0a0a] text-white rounded-md p-3 font-mono text-[11px] space-y-0.5">
+        {rows.map((r, i) => (
+          <div key={i} className="flex gap-3">
+            <span className="text-white/40 tabular-nums">{`00:${(12+i).toString().padStart(2,"0")}.${(i*7).toString().padStart(3,"0")}`}</span>
+            <span className={r.c}>{r.l}</span>
+            <span className="text-white/80">{r.m}</span>
+          </div>
+        ))}
+      </div>
+    </Stage>
+  );
+}
+
+// ---------- JSON VIEWER ----------
+function JsonViewer() {
+  return (
+    <Stage>
+      <pre className="w-full max-w-md bg-canvas-soft border border-hairline rounded-md p-3 font-mono text-[11px] text-ink">
+{`{
+  "id": "vanta-ui",
+  "version": "1.0.0",
+  "components": 400,
+  "themes": ["light", "dark"],
+  "author": { "name": "M Iqbal S" }
+}`}
+      </pre>
+    </Stage>
+  );
+}
+
+// ---------- CODE DIFF ----------
+function CodeDiff() {
+  return (
+    <Stage>
+      <pre className="w-full max-w-md bg-canvas-soft border border-hairline rounded-md p-3 font-mono text-[11px]">
+        <div className="text-mute">@@ -3,4 +3,5 @@</div>
+        <div className="bg-destructive/10 text-destructive">- variant: "basic"</div>
+        <div className="bg-success/10 text-success">+ variant: "premium"</div>
+        <div className="bg-success/10 text-success">+ glow: true</div>
+        <div className="text-body">  rounded: true</div>
+      </pre>
+    </Stage>
+  );
+}
+
+// ---------- SEGMENT CONTROL ----------
+function SegmentControl() {
+  return (
+    <Stage>
+      <div className="inline-flex p-1 rounded-lg bg-canvas-soft border border-hairline text-sm">
+        {["Day", "Week", "Month", "Year"].map((s, i) => (
+          <button key={s} className={`px-3 py-1 rounded-md ${i===1 ? "bg-canvas text-ink shadow-sm" : "text-body"}`}>{s}</button>
+        ))}
+      </div>
+    </Stage>
+  );
+}
+
+// ---------- EMOJI PICKER ----------
+function EmojiPicker() {
+  const emo = "😀😃😄😁😆😅🤣😂🙂😉😍🥰😎🤩🥳🙃😴🤔🤨😏😬😮😯😲🤯".split("");
+  return (
+    <Stage>
+      <div className="w-full max-w-xs rounded-xl border border-hairline bg-canvas p-2">
+        <div className="flex items-center gap-1 px-1 pb-2 border-b border-hairline text-xs text-mute">
+          <Smile className="h-3.5 w-3.5"/>Smileys
+        </div>
+        <div className="grid grid-cols-8 gap-1 pt-2 text-lg">
+          {emo.slice(0, 24).map((e, i) => <button key={i} className="h-7 w-7 grid place-items-center rounded hover:bg-canvas-soft">{e}</button>)}
+        </div>
+      </div>
+    </Stage>
+  );
+}
+
+// ---------- COUNTRY PICKER ----------
+function CountryPicker() {
+  return (
+    <Stage>
+      <div className="w-full max-w-xs rounded-xl border border-hairline bg-canvas p-2 space-y-0.5">
+        {[["🇮🇩","Indonesia"],["🇸🇬","Singapore"],["🇯🇵","Japan"],["🇺🇸","United States"]].map(([f,n]) => (
+          <button key={n} className="w-full flex items-center gap-3 px-2 py-1.5 rounded-md hover:bg-canvas-soft text-sm">
+            <span className="text-lg">{f}</span><span className="text-ink">{n}</span>
+          </button>
+        ))}
+      </div>
+    </Stage>
+  );
+}
+
+// ---------- CURRENCY INPUT ----------
+function CurrencyInput() {
+  return (
+    <Stage>
+      <div className="flex items-center w-full max-w-xs rounded-md border border-hairline bg-canvas overflow-hidden">
+        <button className="h-10 px-3 text-sm border-r border-hairline bg-canvas-soft inline-flex items-center gap-1">USD <ChevronDown className="h-3 w-3"/></button>
+        <input defaultValue="1,250.00" className="flex-1 h-10 px-3 text-sm tabular-nums bg-transparent outline-none"/>
+      </div>
+    </Stage>
+  );
+}
+
+// ---------- GRADIENT BUILDER ----------
+function GradientBuilder() {
+  const grads = [
+    "linear-gradient(135deg,#7928ca,#ff0080)",
+    "linear-gradient(135deg,#0070f3,#00dfd8)",
+    "linear-gradient(135deg,#ff4d4d,#f9cb28)",
+    "linear-gradient(135deg,#10b981,#0070f3)",
+    "linear-gradient(135deg,#ff0080,#ff8a00)",
+    "linear-gradient(135deg,#1a1a1a,#7928ca)",
+  ];
+  return (
+    <Stage>
+      <div className="grid grid-cols-3 gap-2">
+        {grads.map((g, i) => (
+          <button key={i} className="h-16 w-20 rounded-lg ring-1 ring-hairline" style={{ backgroundImage: g }}/>
+        ))}
+      </div>
+    </Stage>
+  );
+}
+
+// ---------- TOKEN TABLE ----------
+function TokenTable() {
+  const rows = [
+    { k: "--ink", v: "#171717", c: "#171717" },
+    { k: "--canvas", v: "#ffffff", c: "#ffffff" },
+    { k: "--link", v: "#0070f3", c: "#0070f3" },
+    { k: "--violet", v: "#7928ca", c: "#7928ca" },
+  ];
+  return (
+    <Stage>
+      <div className="w-full max-w-md rounded-md border border-hairline overflow-hidden text-xs">
+        {rows.map(r => (
+          <div key={r.k} className="flex items-center gap-3 px-3 py-2 border-b border-hairline last:border-0">
+            <div className="h-5 w-5 rounded ring-1 ring-hairline" style={{ background: r.c }}/>
+            <code className="font-mono text-ink flex-1">{r.k}</code>
+            <code className="font-mono text-mute">{r.v}</code>
+          </div>
+        ))}
+      </div>
+    </Stage>
+  );
+}
+
+// ---------- SHORTCUT LIST ----------
+function ShortcutList() {
+  const list = [["Open palette","⌘ K"],["Toggle theme","⌘ T"],["Go to docs","G D"],["New project","⌘ N"]];
+  return (
+    <Stage>
+      <div className="w-full max-w-sm space-y-1">
+        {list.map(([l,k]) => (
+          <div key={l} className="flex items-center justify-between text-sm py-1.5">
+            <span className="text-body">{l}</span>
+            <kbd className="px-2 py-0.5 rounded border border-hairline text-[10px] font-mono bg-canvas-soft">{k}</kbd>
+          </div>
+        ))}
+      </div>
+    </Stage>
+  );
+}
+
+// ---------- METRIC ROW ----------
+function MetricRow() {
+  const m = [
+    { l: "MRR", v: "$28,410", d: "+12%", up: true },
+    { l: "Churn", v: "1.8%", d: "-0.4%", up: true },
+    { l: "DAU", v: "4,210", d: "+3.1%", up: true },
+    { l: "Errors", v: "47", d: "+22%", up: false },
+  ];
+  return (
+    <Stage>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 w-full max-w-2xl">
+        {m.map(x => (
+          <div key={x.l} className="rounded-lg border border-hairline bg-canvas p-3">
+            <div className="text-[10px] uppercase font-mono text-mute">{x.l}</div>
+            <div className="text-xl font-medium text-ink tabular-nums mt-0.5">{x.v}</div>
+            <div className={`text-[11px] mt-1 inline-flex items-center gap-1 ${x.up ? "text-success" : "text-destructive"}`}>
+              {x.up ? <TrendingUp className="h-3 w-3"/> : <TrendingDown className="h-3 w-3"/>}{x.d}
+            </div>
+          </div>
+        ))}
+      </div>
+    </Stage>
+  );
+}
+
+// ---------- TROPHY / ACHIEVEMENT ----------
+function Achievement() {
+  return (
+    <Stage>
+      <div className="w-full max-w-sm rounded-2xl border border-hairline bg-canvas p-5 text-center">
+        <div className="mx-auto h-16 w-16 rounded-full grid place-items-center text-white" style={{ backgroundImage: "linear-gradient(135deg,#f5a623,#ff0080)" }}>
+          <Award className="h-8 w-8"/>
+        </div>
+        <div className="mt-3 text-base font-medium text-ink">Streak unlocked!</div>
+        <div className="text-xs text-mute">7 days of shipping in a row.</div>
+        <button className="mt-3 h-8 px-4 rounded-md bg-ink text-white text-xs">Share</button>
+      </div>
+    </Stage>
+  );
+}
+
+// ---------- FEATURE FLAG ----------
+function FeatureFlag() {
+  return (
+    <Stage>
+      <div className="w-full max-w-md rounded-lg border border-hairline bg-canvas divide-y divide-hairline">
+        {[["new-dashboard","on","Stable"],["ai-search","on","Beta"],["mobile-app","off","Internal"]].map(([n,s,g]) => (
+          <div key={n} className="flex items-center justify-between p-3">
+            <div>
+              <div className="text-sm font-mono text-ink">{n}</div>
+              <div className="text-[11px] text-mute">{g}</div>
+            </div>
+            <span className={`text-xs px-2 py-0.5 rounded-full ${s==="on" ? "bg-success/10 text-success" : "bg-canvas-soft text-mute"}`}>{s.toUpperCase()}</span>
+          </div>
+        ))}
+      </div>
+    </Stage>
+  );
+}
+
+// ---------- DATABASE QUERY CARD ----------
+function DBQuery() {
+  return (
+    <Stage>
+      <div className="w-full max-w-md rounded-lg border border-hairline overflow-hidden">
+        <div className="bg-canvas-soft px-3 py-2 flex items-center gap-2 border-b border-hairline">
+          <Database className="h-3.5 w-3.5 text-link"/><span className="text-xs font-mono text-ink">SELECT users</span>
+          <span className="ml-auto text-[10px] text-mute">12ms</span>
+        </div>
+        <pre className="bg-[#0a0a0a] text-white p-3 font-mono text-[11px]">{`SELECT id, name, email
+FROM users
+WHERE created_at > NOW() - INTERVAL '7 days'
+ORDER BY created_at DESC;`}</pre>
+      </div>
+    </Stage>
+  );
+}
+
+// ---------- PRESENCE / ONLINE USERS ----------
+function Presence() {
+  const users = [["A","#7928ca"],["B","#0070f3"],["C","#10b981"],["D","#f5a623"]];
+  return (
+    <Stage>
+      <div className="flex items-center gap-3">
+        <div className="flex -space-x-2">
+          {users.map(([n,c],i)=>(
+            <div key={i} className="h-8 w-8 rounded-full border-2 border-canvas grid place-items-center text-xs text-white" style={{background:c as string}}>{n}</div>
+          ))}
+        </div>
+        <div className="text-xs text-body"><span className="text-ink font-medium">4 people</span> editing now</div>
+      </div>
+    </Stage>
+  );
+}
+
+// ---------- TAG CLOUD ----------
+function TagCloud() {
+  const tags = [
+    ["react", 24], ["tailwind", 20], ["ai", 18], ["nextjs", 16], ["design", 14], ["typescript", 22],
+    ["vercel", 12], ["motion", 10], ["a11y", 16], ["shadcn", 14], ["ui", 26], ["dx", 12],
+  ];
+  return (
+    <Stage>
+      <div className="flex flex-wrap gap-2 items-center justify-center max-w-md">
+        {tags.map(([t,s]: any) => (
+          <span key={t} className="text-ink" style={{ fontSize: `${10 + s/2}px` }}>#{t}</span>
+        ))}
+      </div>
+    </Stage>
+  );
+}
+
+// ---------- SHIMMER BUTTON ----------
+function ShimmerBtn({ variant }: { variant: V }) {
+  const grad = variant === "rainbow" ? "linear-gradient(90deg,#ff0080,#7928ca,#0070f3,#00dfd8,#10b981,#f5a623,#ff0080)"
+    : "linear-gradient(90deg,#0070f3,#7928ca,#0070f3)";
+  return (
+    <Stage>
+      <button className="h-11 px-6 rounded-full text-sm text-white font-medium relative overflow-hidden" style={{ backgroundImage: grad, backgroundSize: "200% 100%", animation: "shimmer 2.5s linear infinite" }}>
+        <Sparkles className="h-4 w-4 inline -mt-0.5 mr-1.5"/>Try Vanta Pro
+      </button>
+    </Stage>
+  );
+}
+
+// ---------- BENTO HERO ----------
+function BentoHero() {
+  return (
+    <Stage h="min-h-[300px]">
+      <div className="grid grid-cols-4 grid-rows-2 gap-2 w-full max-w-2xl h-56">
+        <div className="col-span-2 row-span-2 rounded-xl mesh-bg"/>
+        <div className="rounded-xl bg-canvas-soft border border-hairline"/>
+        <div className="rounded-xl bg-ink"/>
+        <div className="col-span-2 rounded-xl border border-hairline grid place-items-center text-xs text-mute">Code preview</div>
+      </div>
+    </Stage>
+  );
+}
+
+// ---------- CONFETTI BUTTON ----------
+function ConfettiBtn() {
+  return (
+    <Stage>
+      <button className="h-11 px-5 rounded-full bg-ink text-white text-sm inline-flex items-center gap-2">
+        <Rocket className="h-4 w-4"/>Launch
+      </button>
+    </Stage>
+  );
+}
+
 // ---------- DISPATCH ----------
 export function Preview({ kind, variant }: { kind: string; variant?: string }) {
   switch (kind) {
@@ -1645,6 +2380,48 @@ export function Preview({ kind, variant }: { kind: string; variant?: string }) {
     case "responsive-preview": return <ResponsivePreview/>;
     case "chart": return <Chart variant={variant}/>;
     case "logo": return <Logo/>;
+    // v2 — AI
+    case "ai-profile": return <AIProfile variant={variant}/>;
+    case "ai-agent": return <AIAgent variant={variant}/>;
+    case "ai-persona": return <AIPersona/>;
+    case "ai-prompt-card": return <AIPromptCard variant={variant}/>;
+    case "ai-tool-call": return <AIToolCall/>;
+    case "ai-citation": return <AICitation/>;
+    case "ai-suggestion": return <AISuggestion/>;
+    case "ai-model-picker": return <AIModelPicker/>;
+    case "ai-stream": return <AIStream/>;
+    case "ai-memory": return <AIMemory/>;
+    case "ai-token-usage": return <AITokenUsage/>;
+    // v2 — Data / Dashboard
+    case "kpi-tile": return <KPITile variant={variant}/>;
+    case "gauge": return <Gauge/>;
+    case "calendar-heat": return <CalendarHeat/>;
+    case "metric-row": return <MetricRow/>;
+    case "feature-flag": return <FeatureFlag/>;
+    case "db-query": return <DBQuery/>;
+    case "log-viewer": return <LogViewer/>;
+    case "json-viewer": return <JsonViewer/>;
+    case "code-diff": return <CodeDiff/>;
+    case "token-table": return <TokenTable/>;
+    case "tag-cloud": return <TagCloud/>;
+    case "presence": return <Presence/>;
+    // v2 — Social / Content
+    case "social-card": return <SocialCard/>;
+    case "blog-card": return <BlogCard/>;
+    case "comment-thread": return <CommentThread/>;
+    case "review-card": return <ReviewCard/>;
+    case "achievement": return <Achievement/>;
+    // v2 — Forms / Pickers
+    case "segment": return <SegmentControl/>;
+    case "emoji-picker": return <EmojiPicker/>;
+    case "country-picker": return <CountryPicker/>;
+    case "currency-input": return <CurrencyInput/>;
+    case "gradient-builder": return <GradientBuilder/>;
+    case "shortcut-list": return <ShortcutList/>;
+    // v2 — Marketing / Animation
+    case "shimmer-btn": return <ShimmerBtn variant={variant}/>;
+    case "bento-hero": return <BentoHero/>;
+    case "confetti-btn": return <ConfettiBtn/>;
     default:
       return <Stage><div className="text-sm text-mute">Preview pending.</div></Stage>;
   }
