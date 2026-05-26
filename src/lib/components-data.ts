@@ -296,6 +296,23 @@ export const COMPONENTS: ComponentEntry[] = [
   make("Theme Customizer", "Actions", "theme-switcher", "Token customizer.", { variant: "customizer" }),
   make("Responsive Preview", "Layout", "responsive-preview", "Device frames."),
   make("Showcase Tile", "Marketing", "card", "Showcase tile.", { variant: "showcase" }),
+
+  // Additional pack (15) to push the catalog past 200
+  make("Hero Mesh", "Marketing", "hero", "Hero with mesh background.", { variant: "mesh" }),
+  make("Hero Terminal", "Marketing", "hero", "Hero with terminal demo.", { variant: "terminal" }),
+  make("Feature Bento", "Marketing", "feature-section", "Bento feature grid.", { variant: "bento" }),
+  make("Pricing Compare", "Marketing", "pricing-section", "Compare plans table.", { variant: "compare" }),
+  make("Testimonial Marquee", "Marketing", "testimonial", "Scrolling testimonials.", { variant: "marquee" }),
+  make("Stat Sparkline", "Dashboard", "card", "Stat with sparkline.", { variant: "stat-spark" }),
+  make("Settings Form", "Forms", "form", "Settings form.", { variant: "settings" }),
+  make("Search Modal", "Overlays", "command-menu", "Search modal.", { variant: "search" }),
+  make("Notification Toast", "Feedback", "toast", "Stacked toasts.", { variant: "stack" }),
+  make("Status Page Row", "Data Display", "list", "Status row.", { variant: "status" }),
+  make("Logo Mark", "Layout", "logo", "Brand logo mark."),
+  make("Avatar Stack Large", "Data Display", "avatar", "Large avatar stack.", { variant: "group-lg" }),
+  make("Gradient Heading", "Animation", "ticker", "Gradient gradient heading.", { variant: "gradient-heading" }),
+  make("Glow Card", "Animation", "card", "Glow border card.", { variant: "glow" }),
+  make("Bento Layout", "Layout", "masonry", "Bento mixed grid.", { variant: "bento" }),
 ];
 
 export const CATEGORIES: Category[] = [
