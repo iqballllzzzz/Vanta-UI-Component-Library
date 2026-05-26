@@ -86,7 +86,7 @@ export function CommandMenu() {
           onKeyDown={(e) => {
             if (e.key === "ArrowDown") { e.preventDefault(); setActive((a) => Math.min(results.length - 1, a + 1)); }
             else if (e.key === "ArrowUp") { e.preventDefault(); setActive((a) => Math.max(0, a - 1)); }
-            else if (e.key === "Enter" && results[active]) { e.preventDefault(); go(results[active].slug); }
+            else if (e.key === "Enter" && results[active]) { e.preventDefault(); go(results[active].c.slug); }
           }}
         >
           <div className="flex items-center gap-2 px-3 h-12 border-b border-hairline">
