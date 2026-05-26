@@ -410,7 +410,7 @@ const v2: ComponentEntry[] = [
   make("Testimonial Marquee Pro", "Marketing", "testimonial", "Scrolling testimonials.", { variant: "marquee", isNew: true }),
   make("Pricing Compare Pro", "Marketing", "pricing-section", "Compare plan tiers.", { variant: "compare", isNew: true }),
   make("FAQ Section Pro", "Marketing", "faq", "FAQ with stacked answers.", { isNew: true }),
-  make("Feature Bento", "Marketing", "feature-section", "Bento feature grid.", { variant: "bento", isNew: true }),
+  make("Feature Bento Pro", "Marketing", "feature-section", "Bento feature grid.", { variant: "bento", isNew: true }),
   make("CTA Polarity", "Marketing", "cta", "Inverse CTA band.", { isNew: true }),
   make("Newsletter Pro", "Marketing", "newsletter", "Email capture band.", { isNew: true }),
   make("Stats Band Pro", "Marketing", "stats", "Stats band.", { variant: "band", isNew: true }),
