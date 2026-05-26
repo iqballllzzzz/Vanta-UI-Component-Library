@@ -3,6 +3,7 @@ import { useState } from "react";
 import { COMPONENTS, CATEGORIES } from "@/lib/components-data";
 import { Preview } from "@/components/vanta/Preview";
 import { Search } from "lucide-react";
+import { slugify } from "@/lib/slug";
 
 export const Route = createFileRoute("/components")({
   head: () => ({
@@ -25,7 +26,7 @@ function ComponentsIndex() {
       <div className="flex items-end justify-between gap-4 flex-wrap">
         <div>
           <h1 className="text-4xl font-medium tracking-tight">Components</h1>
-          <p className="text-body mt-2">{COMPONENTS.length} components, accessible and themable.</p>
+          <p className="text-body mt-2">{COMPONENTS.length}+ components — accessible, themable, copy-paste ready.</p>
         </div>
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-mute" />
@@ -39,13 +40,22 @@ function ComponentsIndex() {
       </div>
       <div className="flex gap-1 mt-6 flex-wrap">
         {["All", ...CATEGORIES].map((c) => (
-          <button
-            key={c}
-            onClick={() => setCat(c)}
-            className={`h-8 px-3 rounded-full text-xs ${cat === c ? "bg-ink text-white" : "border border-hairline text-body hover:bg-canvas-soft"}`}
-          >
-            {c}
-          </button>
+          <div key={c} className="inline-flex">
+            <button
+              onClick={() => setCat(c)}
+              className={`h-8 px-3 rounded-full text-xs ${cat === c ? "bg-ink text-white" : "border border-hairline text-body hover:bg-canvas-soft"}`}
+            >
+              {c}
+            </button>
+            {c !== "All" && (
+              <Link
+                to="/components/category/$category"
+                params={{ category: slugify(c) }}
+                className="ml-1 h-8 px-2 rounded-full text-[10px] border border-hairline text-mute hover:text-ink hover:bg-canvas-soft inline-flex items-center"
+                title={`Open ${c} page`}
+              >↗</Link>
+            )}
+          </div>
         ))}
       </div>
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
@@ -56,7 +66,10 @@ function ComponentsIndex() {
                 <Preview kind={c.kind} variant={c.variant} />
               </div>
               <div className="p-3 flex justify-between items-center">
-                <div className="text-sm font-medium text-ink">{c.name}</div>
+                <div className="text-sm font-medium text-ink flex items-center gap-2">
+                  {c.name}
+                  {c.isNew && <span className="text-[10px] font-mono uppercase text-link bg-link/10 px-1.5 py-0.5 rounded">NEW</span>}
+                </div>
                 <span className="text-[10px] font-mono uppercase text-mute">{c.category}</span>
               </div>
             </div>

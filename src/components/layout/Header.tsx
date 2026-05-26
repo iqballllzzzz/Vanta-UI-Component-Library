@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Github } from "lucide-react";
 import { CommandMenu } from "./CommandMenu";
+import { ThemeToggle } from "./ThemeToggle";
 
 export function Header() {
   return (
@@ -17,6 +18,7 @@ export function Header() {
         </nav>
         <div className="ml-auto flex items-center gap-2">
           <CommandMenu />
+          <ThemeToggle />
           <a href="#" aria-label="GitHub" className="h-8 w-8 grid place-items-center rounded-md border border-hairline"><Github className="h-4 w-4"/></a>
           <a href="#" className="hidden sm:inline-flex h-8 px-3 rounded-md bg-ink text-white text-xs items-center">Get started</a>
         </div>
