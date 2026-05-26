@@ -15,6 +15,7 @@ import { Route as DocsRouteImport } from './routes/docs'
 import { Route as ComponentsRouteImport } from './routes/components'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ComponentsSlugRouteImport } from './routes/components.$slug'
+import { Route as ComponentsCategoryCategoryRouteImport } from './routes/components.category.$category'
 
 const TemplatesRoute = TemplatesRouteImport.update({
   id: '/templates',
@@ -46,6 +47,12 @@ const ComponentsSlugRoute = ComponentsSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => ComponentsRoute,
 } as any)
+const ComponentsCategoryCategoryRoute =
+  ComponentsCategoryCategoryRouteImport.update({
+    id: '/category/$category',
+    path: '/category/$category',
+    getParentRoute: () => ComponentsRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -54,6 +61,7 @@ export interface FileRoutesByFullPath {
   '/showcase': typeof ShowcaseRoute
   '/templates': typeof TemplatesRoute
   '/components/$slug': typeof ComponentsSlugRoute
+  '/components/category/$category': typeof ComponentsCategoryCategoryRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -62,6 +70,7 @@ export interface FileRoutesByTo {
   '/showcase': typeof ShowcaseRoute
   '/templates': typeof TemplatesRoute
   '/components/$slug': typeof ComponentsSlugRoute
+  '/components/category/$category': typeof ComponentsCategoryCategoryRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -71,6 +80,7 @@ export interface FileRoutesById {
   '/showcase': typeof ShowcaseRoute
   '/templates': typeof TemplatesRoute
   '/components/$slug': typeof ComponentsSlugRoute
+  '/components/category/$category': typeof ComponentsCategoryCategoryRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -81,6 +91,7 @@ export interface FileRouteTypes {
     | '/showcase'
     | '/templates'
     | '/components/$slug'
+    | '/components/category/$category'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -89,6 +100,7 @@ export interface FileRouteTypes {
     | '/showcase'
     | '/templates'
     | '/components/$slug'
+    | '/components/category/$category'
   id:
     | '__root__'
     | '/'
@@ -97,6 +109,7 @@ export interface FileRouteTypes {
     | '/showcase'
     | '/templates'
     | '/components/$slug'
+    | '/components/category/$category'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -151,15 +164,24 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ComponentsSlugRouteImport
       parentRoute: typeof ComponentsRoute
     }
+    '/components/category/$category': {
+      id: '/components/category/$category'
+      path: '/category/$category'
+      fullPath: '/components/category/$category'
+      preLoaderRoute: typeof ComponentsCategoryCategoryRouteImport
+      parentRoute: typeof ComponentsRoute
+    }
   }
 }
 
 interface ComponentsRouteChildren {
   ComponentsSlugRoute: typeof ComponentsSlugRoute
+  ComponentsCategoryCategoryRoute: typeof ComponentsCategoryCategoryRoute
 }
 
 const ComponentsRouteChildren: ComponentsRouteChildren = {
   ComponentsSlugRoute: ComponentsSlugRoute,
+  ComponentsCategoryCategoryRoute: ComponentsCategoryCategoryRoute,
 }
 
 const ComponentsRouteWithChildren = ComponentsRoute._addFileChildren(
@@ -176,3 +198,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
