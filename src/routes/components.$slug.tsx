@@ -176,7 +176,7 @@ function ComponentDetail() {
         <h2 className="text-xl font-medium">Installation</h2>
         <div className="mt-3 rounded-xl overflow-hidden border border-hairline">
           <div className="flex items-center gap-1 px-2 pt-2 bg-canvas-soft border-b border-hairline">
-            {(["cli", "npm"] as const).map((t) => (
+            {(["cli", "npm", "init"] as const).map((t) => (
               <button key={t} onClick={() => setInstallTab(t)} className={`h-7 px-3 text-xs rounded-md uppercase font-mono ${installTab === t ? "bg-canvas text-ink border border-hairline border-b-canvas" : "text-mute"}`}>{t}</button>
             ))}
           </div>
