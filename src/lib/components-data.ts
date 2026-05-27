@@ -714,6 +714,5 @@ for (const [name, cat, kind, desc, variant] of extraSpecs) {
   }
 }
 
-export const totalCount = COMPONENTS.length;
 
 export const totalCount = COMPONENTS.length;
