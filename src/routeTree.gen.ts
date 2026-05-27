@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TemplatesRouteImport } from './routes/templates'
 import { Route as ShowcaseRouteImport } from './routes/showcase'
+import { Route as FavoritesRouteImport } from './routes/favorites'
 import { Route as DocsRouteImport } from './routes/docs'
 import { Route as ComponentsRouteImport } from './routes/components'
 import { Route as IndexRouteImport } from './routes/index'
@@ -25,6 +26,11 @@ const TemplatesRoute = TemplatesRouteImport.update({
 const ShowcaseRoute = ShowcaseRouteImport.update({
   id: '/showcase',
   path: '/showcase',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FavoritesRoute = FavoritesRouteImport.update({
+  id: '/favorites',
+  path: '/favorites',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DocsRoute = DocsRouteImport.update({
@@ -58,6 +64,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/components': typeof ComponentsRouteWithChildren
   '/docs': typeof DocsRoute
+  '/favorites': typeof FavoritesRoute
   '/showcase': typeof ShowcaseRoute
   '/templates': typeof TemplatesRoute
   '/components/$slug': typeof ComponentsSlugRoute
@@ -67,6 +74,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/components': typeof ComponentsRouteWithChildren
   '/docs': typeof DocsRoute
+  '/favorites': typeof FavoritesRoute
   '/showcase': typeof ShowcaseRoute
   '/templates': typeof TemplatesRoute
   '/components/$slug': typeof ComponentsSlugRoute
@@ -77,6 +85,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/components': typeof ComponentsRouteWithChildren
   '/docs': typeof DocsRoute
+  '/favorites': typeof FavoritesRoute
   '/showcase': typeof ShowcaseRoute
   '/templates': typeof TemplatesRoute
   '/components/$slug': typeof ComponentsSlugRoute
@@ -88,6 +97,7 @@ export interface FileRouteTypes {
     | '/'
     | '/components'
     | '/docs'
+    | '/favorites'
     | '/showcase'
     | '/templates'
     | '/components/$slug'
@@ -97,6 +107,7 @@ export interface FileRouteTypes {
     | '/'
     | '/components'
     | '/docs'
+    | '/favorites'
     | '/showcase'
     | '/templates'
     | '/components/$slug'
@@ -106,6 +117,7 @@ export interface FileRouteTypes {
     | '/'
     | '/components'
     | '/docs'
+    | '/favorites'
     | '/showcase'
     | '/templates'
     | '/components/$slug'
@@ -116,6 +128,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ComponentsRoute: typeof ComponentsRouteWithChildren
   DocsRoute: typeof DocsRoute
+  FavoritesRoute: typeof FavoritesRoute
   ShowcaseRoute: typeof ShowcaseRoute
   TemplatesRoute: typeof TemplatesRoute
 }
@@ -134,6 +147,13 @@ declare module '@tanstack/react-router' {
       path: '/showcase'
       fullPath: '/showcase'
       preLoaderRoute: typeof ShowcaseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/favorites': {
+      id: '/favorites'
+      path: '/favorites'
+      fullPath: '/favorites'
+      preLoaderRoute: typeof FavoritesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/docs': {
@@ -192,6 +212,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ComponentsRoute: ComponentsRouteWithChildren,
   DocsRoute: DocsRoute,
+  FavoritesRoute: FavoritesRoute,
   ShowcaseRoute: ShowcaseRoute,
   TemplatesRoute: TemplatesRoute,
 }
