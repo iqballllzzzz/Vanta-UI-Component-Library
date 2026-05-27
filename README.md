@@ -1,261 +1,84 @@
-<div align="center">
-
 # Vanta UI
 
-Modern, elegant, and production-ready UI components for building fast and beautiful web applications.
+> 500+ open-source React components inspired by Vercel's design language. Built by **M Iqbal S**.
 
-500+ open-source components, blocks, templates, and motion-powered interfaces designed for modern developers.
+[![License: MIT](https://img.shields.io/badge/License-MIT-black.svg)](LICENSE)
 
-</div>
+## ⚡ Quickstart
 
----
-
-## Overview
-
-Vanta UI is a modern component library and design system built for developers who want clean design, scalable architecture, and fast development.
-
-Designed with a premium and minimal aesthetic, Vanta UI provides reusable components, templates, and UI blocks for dashboards, SaaS products, AI platforms, portfolios, and modern web applications.
-
-## Features
-
-- 500+ Components & UI Blocks
-- Modern Minimal Design
-- Dark & Light Mode
-- Motion & Interactive UI
-- Responsive Components
-- TypeScript Support
-- Tailwind CSS Ready
-- Accessibility Focused
-- Copy & Paste Workflow
-- Open Source
-- Developer Friendly
-- Fast Performance
-- Production Ready
-- CLI Installation
-- Extensive Documentation
-
----
-
-## Installation
-
-Initialize a new Vanta UI project:
+Scaffold a new app with the Vanta UI starter:
 
 ```bash
 npx vanta-ui init my-app
-
-Add components:
-
-npx vanta-ui add button
-
-npx vanta-ui add navbar
-
-npx vanta-ui add card
-
-Run development server:
-
+cd my-app
 npm run dev
+```
 
+That command:
+1. Creates `my-app/` with the recommended Vite + React + TanStack Start template.
+2. Installs Tailwind, Framer Motion, Radix UI, Lucide, GSAP, Swiper, AOS, i18next.
+3. Drops a `vanta.config.ts` and adds the Vanta theme tokens to `styles.css`.
+4. Pre-installs the 30 most-used Vanta components.
 
----
+## 📦 Adding individual components
 
-Components
+```bash
+# Add a single component
+npx vanta-ui add button-gradient
 
-Vanta UI includes a large collection of reusable components.
+# Add several at once
+npx vanta-ui add bento card pricing-trio ai-chat-thread
 
-Core Components
+# List everything available
+npx vanta-ui list
+```
 
-Button
+Or install the umbrella package:
 
-Card
+```bash
+npm i @vanta-ui/react
+```
 
-Input
+```tsx
+import { ButtonGradient, BentoFeatureGrid } from "@vanta-ui/react";
 
-Modal
+export default function Page() {
+  return (
+    <>
+      <ButtonGradient>Deploy with Vanta</ButtonGradient>
+      <BentoFeatureGrid />
+    </>
+  );
+}
+```
 
-Dialog
+## 🧩 What's inside
 
-Badge
+- **500+ components** across Actions, Forms, Navigation, Overlays, Data Display,
+  Feedback, Layout, Media, Marketing, AI, Animation, Auth, Dashboard.
+- **Cmd+K command palette** with fuzzy search across name, props, tags, docs.
+- **Per-component pages** with Preview / Code tabs, device toggles (mobile/tablet/desktop),
+  install commands (CLI / NPM / `vanta-ui init`), props tables, and a11y notes.
+- **Favorites/Bookmarks** persisted to `localStorage` (`vanta-ui:favorites`).
+- **Shareable URLs** with `?variant=` and `?section=` query params.
+- **Dark mode** with persisted preference and no-flash hydration.
+- **Animated logo + hero** powered by Framer Motion.
 
-Avatar
+## 🚀 Deploy
 
-Tooltip
+The repo is preconfigured for **Vite + Vercel**. The included `vercel.json` rewrites all
+routes to `index.html` so the SPA shell handles routing. Push to GitHub and import the
+repo in Vercel — no extra config needed.
 
-Dropdown
+```bash
+npm run build
+```
 
-Tabs
+## 📁 Stack
 
-Accordion
+React 19 · TypeScript · Vite 7 · Tailwind v4 · TanStack Router · Framer Motion ·
+Radix UI · Lucide · sonner · GSAP · Swiper · AOS · i18next
 
-Toast
+## 📝 License
 
-Alert
-
-Table
-
-Pagination
-
-Progress
-
-Skeleton
-
-Navbar
-
-Sidebar
-
-Drawer
-
-
-Sections & Blocks
-
-Hero Section
-
-Pricing Section
-
-Feature Section
-
-Testimonial Section
-
-FAQ Section
-
-CTA Section
-
-Footer
-
-Dashboard Layout
-
-Analytics Cards
-
-AI Chat UI
-
-Prompt Components
-
-Authentication Pages
-
-
-Motion Components
-
-Hover Effects
-
-Scroll Animations
-
-Spotlight Effects
-
-Glass Panels
-
-Cursor Effects
-
-Reveal Animations
-
-Interactive Cards
-
-Floating UI
-
-
-And hundreds more.
-
-
----
-
-Tech Stack
-
-Built using modern web technologies.
-
-React
-
-TypeScript
-
-Tailwind CSS
-
-Motion Libraries
-
-Node.js
-
-Modern Build Tools
-
-
-
----
-
-Why Vanta UI
-
-Vanta UI focuses on clean interfaces, developer experience, and scalable design systems.
-
-Instead of overwhelming users with inconsistent styles, Vanta UI provides carefully designed components that work together seamlessly.
-
-Built for:
-
-SaaS Platforms
-
-AI Applications
-
-Dashboards
-
-Portfolios
-
-Startup Websites
-
-Modern Web Apps
-
-
-
----
-
-Contributing
-
-We welcome contributors of all experience levels.
-
-You can help by:
-
-Adding new components
-
-Improving accessibility
-
-Fixing bugs
-
-Enhancing documentation
-
-Creating templates
-
-Improving developer experience
-
-
-Start by checking issues labeled:
-
-good first issue
-help wanted
-
-Fork the repository and submit a pull request.
-
-
----
-
-Roadmap
-
-More Component Variants
-
-Additional Templates
-
-Advanced Motion Components
-
-Multi Framework Support
-
-Improved CLI
-
-Theme Marketplace
-
-Community Showcase
-
-
-
----
-
-License
-
-Licensed under the MIT License.
-
-
----
-
-<div align="center">Built with passion by the Vanta UI community.
-
-</div>
+MIT © 2026 M Iqbal S
