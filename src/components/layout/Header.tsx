@@ -1,17 +1,31 @@
 import { Link } from "@tanstack/react-router";
 import { Github } from "lucide-react";
+import { motion } from "framer-motion";
 import { CommandMenu } from "./CommandMenu";
 import { ThemeToggle } from "./ThemeToggle";
+import logo from "@/assets/vanta-logo.png";
 
 export function Header() {
   return (
     <header className="sticky top-0 z-40 bg-canvas/80 backdrop-blur border-b border-hairline">
       <div className="mx-auto max-w-7xl h-14 px-5 flex items-center gap-4">
-        <Link to="/" className="font-medium text-ink flex items-center gap-2">
-          <span className="font-mono">▲</span> Vanta UI
+        <Link to="/" className="font-medium text-ink flex items-center gap-2 group">
+          <motion.img
+            src={logo}
+            alt="Vanta UI logo"
+            width={28}
+            height={28}
+            className="h-7 w-7 drop-shadow-[0_0_12px_rgba(99,102,241,0.45)]"
+            initial={{ rotate: -12, scale: 0.8, opacity: 0 }}
+            animate={{ rotate: 0, scale: 1, opacity: 1 }}
+            whileHover={{ rotate: 8, scale: 1.08 }}
+            transition={{ type: "spring", stiffness: 220, damping: 14 }}
+          />
+          <span className="bg-gradient-to-r from-ink via-indigo-600 to-fuchsia-600 bg-clip-text text-transparent">Vanta UI</span>
         </Link>
         <nav className="hidden md:flex gap-1 text-sm text-body ml-2">
           <Link to="/components" className="px-2 py-1 rounded-full hover:bg-canvas-soft" activeProps={{ className: "px-2 py-1 rounded-full text-ink bg-canvas-soft" }}>Components</Link>
+          <Link to="/favorites" className="px-2 py-1 rounded-full hover:bg-canvas-soft">Favorites</Link>
           <Link to="/docs" className="px-2 py-1 rounded-full hover:bg-canvas-soft">Docs</Link>
           <Link to="/templates" className="px-2 py-1 rounded-full hover:bg-canvas-soft">Templates</Link>
           <Link to="/showcase" className="px-2 py-1 rounded-full hover:bg-canvas-soft">Showcase</Link>

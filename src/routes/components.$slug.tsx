@@ -1,8 +1,10 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { useState } from "react";
+import { createFileRoute, Link, notFound, useSearch } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import { FavoriteButton } from "@/components/vanta/FavoriteButton";
 import { findComponent, COMPONENTS } from "@/lib/components-data";
 import { Preview } from "@/components/vanta/Preview";
-import { Copy, Check, Smartphone, Tablet, Monitor, ArrowLeft, Code2 } from "lucide-react";
+import { Copy, Check, Smartphone, Tablet, Monitor, ArrowLeft, Code2, Share2 } from "lucide-react";
 import { slugify } from "@/lib/slug";
 
 export const Route = createFileRoute("/components/$slug")({
@@ -17,14 +19,24 @@ export const Route = createFileRoute("/components/$slug")({
   },
   component: ComponentDetail,
   notFoundComponent: () => <div className="mx-auto max-w-3xl p-12 text-center text-body">Component not found.</div>,
+  validateSearch: (s: Record<string, unknown>) => ({
+    variant: typeof s.variant === "string" ? s.variant : undefined,
+    section: typeof s.section === "string" ? s.section : undefined,
+  }),
 });
 
 function CopyBtn({ text, large }: { text: string; large?: boolean }) {
   const [c, setC] = useState(false);
+  const copy = () => {
+    navigator.clipboard?.writeText(text);
+    setC(true);
+    toast.success("Copied to clipboard", { description: `${text.split("\n")[0].slice(0, 60)}…` });
+    setTimeout(() => setC(false), 1500);
+  };
   if (large) {
     return (
       <button
-        onClick={() => { navigator.clipboard?.writeText(text); setC(true); setTimeout(() => setC(false), 1500); }}
+        onClick={copy}
         className="inline-flex items-center gap-2 h-10 px-4 rounded-md bg-ink text-white text-sm hover:bg-ink/90 transition"
       >
         {c ? <><Check className="h-4 w-4" />Copied to clipboard</> : <><Copy className="h-4 w-4" />Copy code</>}
@@ -33,7 +45,7 @@ function CopyBtn({ text, large }: { text: string; large?: boolean }) {
   }
   return (
     <button
-      onClick={() => { navigator.clipboard?.writeText(text); setC(true); setTimeout(() => setC(false), 1200); }}
+      onClick={copy}
       className="inline-flex items-center gap-1.5 h-7 px-2 rounded-md border border-hairline text-xs bg-canvas hover:bg-canvas-soft"
     >
       {c ? <><Check className="h-3.5 w-3.5 text-success" />Copied</> : <><Copy className="h-3.5 w-3.5" />Copy</>}
@@ -41,18 +53,42 @@ function CopyBtn({ text, large }: { text: string; large?: boolean }) {
   );
 }
 
+function ShareBtn({ slug, variant }: { slug: string; variant?: string }) {
+  const share = () => {
+    const url = `${window.location.origin}/components/${slug}${variant ? `?variant=${encodeURIComponent(variant)}` : ""}`;
+    navigator.clipboard?.writeText(url);
+    toast.success("Share link copied", { description: url });
+  };
+  return (
+    <button onClick={share} className="inline-flex items-center gap-1.5 h-10 px-3 rounded-md border border-hairline bg-canvas hover:bg-canvas-soft text-sm">
+      <Share2 className="h-4 w-4" /> Share
+    </button>
+  );
+}
+
 function ComponentDetail() {
   const { slug } = Route.useParams();
+  const search = useSearch({ from: "/components/$slug" });
   const c = findComponent(slug);
   const [tab, setTab] = useState<"preview" | "code">("preview");
   const [device, setDevice] = useState<"mobile" | "tablet" | "desktop">("desktop");
-  const [installTab, setInstallTab] = useState<"cli" | "npm">("cli");
+  const [installTab, setInstallTab] = useState<"cli" | "npm" | "init">("cli");
+
+  useEffect(() => {
+    if (search.section) {
+      const el = document.getElementById(search.section);
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [search.section]);
 
   if (!c) throw notFound();
 
   const related = COMPONENTS.filter((x) => x.category === c.category && x.slug !== c.slug).slice(0, 4);
   const variants = COMPONENTS.filter((x) => x.kind === c.kind && x.slug !== c.slug).slice(0, 6);
   const deviceW: Record<string, string> = { mobile: "max-w-[375px]", tablet: "max-w-[768px]", desktop: "max-w-full" };
+  const installCmd =
+    installTab === "cli" ? c.cli : installTab === "npm" ? c.pkg : `npx vanta-ui init my-app`;
+  const fullFile = `${c.code ?? ""}\n\n/* ----- usage ----- */\n${c.usage ?? ""}\n\n/* ----- install ----- */\n${c.cli ?? ""}\n${c.pkg ?? ""}`;
 
   return (
     <div className="mx-auto max-w-5xl px-5 py-12">
@@ -70,7 +106,11 @@ function ComponentDetail() {
           </div>
           <p className="text-body mt-2">{c.description}</p>
         </div>
-        <CopyBtn text={c.code ?? ""} large />
+        <div className="flex items-center gap-2">
+          <FavoriteButton slug={c.slug} name={c.name} />
+          <ShareBtn slug={c.slug} variant={c.variant} />
+          <CopyBtn text={fullFile} large />
+        </div>
       </div>
 
       {/* Tabs */}
@@ -141,8 +181,8 @@ function ComponentDetail() {
             ))}
           </div>
           <div className="flex items-center justify-between bg-ink text-white p-4 font-mono text-xs">
-            <span>$ {installTab === "cli" ? c.cli : c.pkg}</span>
-            <CopyBtn text={(installTab === "cli" ? c.cli : c.pkg) ?? ""} />
+            <span>$ {installCmd}</span>
+            <CopyBtn text={installCmd ?? ""} />
           </div>
         </div>
       </section>
