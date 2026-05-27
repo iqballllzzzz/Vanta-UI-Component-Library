@@ -1,5 +1,5 @@
 // Copyright (c) 2026 M Iqbal S — Vanta UI
-// Licensed under MIT License — https://github.com/iqballllzzzz/vanta-ui/blob/main/LICENSE
+// Licensed under MIT License — https://github.com/iqballllzzzz/Vanta-UI-Component-Library/blob/main/LICENSE
 
 import { motion } from "framer-motion";
 import {
@@ -2432,4 +2432,4 @@ export function Preview({ kind, variant }: { kind: string; variant?: string }) {
 }
 
 // Copyright (c) 2026 M Iqbal S — Vanta UI
-// Licensed under MIT License — https://github.com/iqballllzzzz/vanta-ui/blob/main/LICENSE
+// Licensed under MIT License — https://github.com/iqballllzzzz/Vanta-UI-Component-Library/blob/main/LICENSE
