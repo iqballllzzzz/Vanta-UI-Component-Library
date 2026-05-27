@@ -1,3 +1,6 @@
+// Copyright (c) 2026 M Iqbal S — Vanta UI
+// Licensed under MIT License — https://github.com/iqballllzzzz/vanta-ui/blob/main/LICENSE
+
 import { motion } from "framer-motion";
 import {
   Check, ChevronDown, ChevronRight, Search, Command, Star, Heart,
@@ -2427,3 +2430,6 @@ export function Preview({ kind, variant }: { kind: string; variant?: string }) {
       return <Stage><div className="text-sm text-mute">Preview pending.</div></Stage>;
   }
 }
+
+// Copyright (c) 2026 M Iqbal S — Vanta UI
+// Licensed under MIT License — https://github.com/iqballllzzzz/vanta-ui/blob/main/LICENSE
