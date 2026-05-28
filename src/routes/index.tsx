@@ -92,10 +92,13 @@ function Index() {
 
       {/* CTA */}
       <section className="mx-auto max-w-7xl px-5 py-20">
-        <div className="bg-ink text-white rounded-2xl p-12 text-center">
-          <h2 className="text-3xl md:text-4xl font-medium tracking-tight">Ready to build?</h2>
-          <p className="text-white/70 mt-3">Open source, MIT licensed. Free forever.</p>
-          <Link to="/components" className="mt-6 inline-flex h-11 px-6 rounded-full bg-white text-ink text-sm items-center">Browse components</Link>
+        <div className="rounded-2xl p-12 text-center text-white relative overflow-hidden" style={{ background: "linear-gradient(135deg,#0a0a0a 0%,#1a1033 55%,#3b0a52 100%)" }}>
+          <div className="absolute inset-0 opacity-30 pointer-events-none" style={{ backgroundImage: "radial-gradient(at 30% 30%, #7928ca 0px, transparent 50%), radial-gradient(at 70% 70%, #ff0080 0px, transparent 50%)" }} />
+          <div className="relative">
+            <h2 className="text-3xl md:text-4xl font-medium tracking-tight text-white">Ready to build?</h2>
+            <p className="text-white/80 mt-3">Open source, MIT licensed. Free forever.</p>
+            <Link to="/components" className="mt-6 inline-flex h-11 px-6 rounded-full bg-white text-[#0a0a0a] text-sm items-center font-medium hover:bg-white/90 transition">Browse components</Link>
+          </div>
         </div>
       </section>
     </div>
