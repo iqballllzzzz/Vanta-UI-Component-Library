@@ -23,18 +23,23 @@ export type ComponentEntry = {
   variant?: string; // variant key passed to renderer
   description: string;
   tags: string[];
-  props?: { name: string; type: string; default?: string; description: string }[];
+  props?: { name: string; type: string; default?: string; description: string; required?: boolean }[];
   a11y?: string[];
   code?: string;
   usage?: string;
   cli?: string;
   pkg?: string;
   isNew?: boolean;
+  setup?: string;
+  styles?: string;
+  keywords?: string[];
+  docs?: string;
+  thumbnail?: string;
 };
 
 const defaultProps = [
-  { name: "className", type: "string", description: "Tailwind classes appended to the root." },
-  { name: "children", type: "ReactNode", description: "Slot content." },
+  { name: "className", type: "string", description: "Tailwind classes appended to the root.", required: false },
+  { name: "children", type: "ReactNode", description: "Slot content.", required: false },
 ];
 
 const defaultA11y = [
@@ -66,6 +71,16 @@ const make = (
   code:
     extras.code ??
     `// ${name} — Vanta UI\nexport function ${name.replace(/\s+/g, "")}(props) {\n  return (\n    /* see live preview */\n    null\n  );\n}`,
+  setup:
+    extras.setup ??
+    `import { cn } from "@/lib/utils";\nimport { motion } from "framer-motion";\n\n// Register theme tokens and component exports before using ${name.replace(/\s+/g, "")}.`,
+  styles:
+    extras.styles ??
+    `.vanta-${slugify(name)} {\n  border-radius: var(--radius-md);\n  border: 1px solid var(--hairline);\n  background: var(--canvas);\n  color: var(--ink);\n}`,
+  docs:
+    extras.docs ??
+    `${name} is a production-ready ${category.toLowerCase()} component with accessible defaults, copy-paste friendly source, and responsive behavior for light and dark themes.`,
+  keywords: extras.keywords ?? [kind, category.toLowerCase(), slugify(name), ...(extras.tags ?? [])],
   ...extras,
 });
 
@@ -713,6 +728,47 @@ for (const [name, cat, kind, desc, variant] of extraSpecs) {
     COMPONENTS.push(make(name, cat, kind, desc, { variant, isNew: true }));
   }
 }
+
+
+export const LIBRARY_LINKS = {
+  github: "https://github.com/iqballllzzzz/Vanta-UI-Component-Library",
+  changelog: "/docs?section=changelog",
+  roadmap: "/docs?section=roadmap",
+  contributing: "/docs?section=contributing",
+  issues: "https://github.com/iqballllzzzz/Vanta-UI-Component-Library/issues",
+};
+
+export const THEME_TOKENS_EXPORT = `export const vantaTheme = {
+  colors: {
+    canvas: "var(--canvas)",
+    canvasSoft: "var(--canvas-soft)",
+    ink: "var(--ink)",
+    body: "var(--body)",
+    mute: "var(--mute)",
+    hairline: "var(--hairline)",
+    primary: "var(--primary)",
+    link: "var(--link)",
+    success: "var(--success)",
+    warning: "var(--warning)",
+    destructive: "var(--destructive)",
+  },
+  radius: {
+    sm: "6px",
+    md: "8px",
+    lg: "12px",
+    xl: "16px",
+    pill: "100px",
+  },
+  typography: {
+    sans: "Geist, Inter, system-ui, -apple-system, sans-serif",
+    mono: '"Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, monospace',
+  },
+  spacing: {
+    section: "5rem",
+    container: "max-w-7xl",
+    cardPadding: "1rem",
+  },
+};`;
 
 
 export const totalCount = COMPONENTS.length;
