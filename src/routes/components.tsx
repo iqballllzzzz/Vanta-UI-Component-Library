@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet, useRouterState } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { COMPONENTS, CATEGORIES } from "@/lib/components-data";
 import { Preview } from "@/components/vanta/Preview";
@@ -16,8 +16,18 @@ export const Route = createFileRoute("/components")({
       { name: "description", content: "Browse Vanta UI components with searchable props, usage, keywords, and reusable code." },
     ],
   }),
-  component: ComponentsIndex,
+  component: ComponentsRouteShell,
 });
+
+function ComponentsRouteShell() {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+
+  if (pathname !== "/components") {
+    return <Outlet />;
+  }
+
+  return <ComponentsIndex />;
+}
 
 function ComponentsIndex() {
   const [q, setQ] = useState("");
