@@ -97,6 +97,9 @@
           radial-gradient(at 30% 70%, #f9cb28 0px, transparent 50%);
 }
 
+html, body { overflow-x: hidden; max-width: 100vw; }
+#root { overflow-x: hidden; }
+
 .dark {
   --canvas: #0a0a0a;
   --canvas-soft: #111111;
