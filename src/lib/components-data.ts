@@ -730,4 +730,45 @@ for (const [name, cat, kind, desc, variant] of extraSpecs) {
 }
 
 
+export const LIBRARY_LINKS = {
+  github: "https://github.com/iqballllzzzz/Vanta-UI-Component-Library",
+  changelog: "/docs?section=changelog",
+  roadmap: "/docs?section=roadmap",
+  contributing: "/docs?section=contributing",
+  issues: "https://github.com/iqballllzzzz/Vanta-UI-Component-Library/issues",
+};
+
+export const THEME_TOKENS_EXPORT = `export const vantaTheme = {
+  colors: {
+    canvas: "var(--canvas)",
+    canvasSoft: "var(--canvas-soft)",
+    ink: "var(--ink)",
+    body: "var(--body)",
+    mute: "var(--mute)",
+    hairline: "var(--hairline)",
+    primary: "var(--primary)",
+    link: "var(--link)",
+    success: "var(--success)",
+    warning: "var(--warning)",
+    destructive: "var(--destructive)",
+  },
+  radius: {
+    sm: "6px",
+    md: "8px",
+    lg: "12px",
+    xl: "16px",
+    pill: "100px",
+  },
+  typography: {
+    sans: "Geist, Inter, system-ui, -apple-system, sans-serif",
+    mono: '"Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, monospace',
+  },
+  spacing: {
+    section: "5rem",
+    container: "max-w-7xl",
+    cardPadding: "1rem",
+  },
+};`;
+
+
 export const totalCount = COMPONENTS.length;
