@@ -2278,22 +2278,23 @@ function ConfettiBtn() {
 }
 
 // ---------- DISPATCH ----------
-export function Preview({ kind, variant }: { kind: string; variant?: string }) {
+export function Preview({ kind, variant, interactive = true }: { kind: string; variant?: string; interactive?: boolean }) {
+  let content: React.ReactNode;
   switch (kind) {
-    case "button": return <Button variant={variant}/>;
-    case "icon-button": return <IconButton/>;
-    case "toggle": return <Toggle/>;
-    case "button-group": return <ButtonGroup/>;
-    case "split-button": return <SplitButton/>;
-    case "fab": return <FAB/>;
-    case "copy-button": return <CopyButton/>;
-    case "link": return <LinkP/>;
-    case "badge": return <Badge variant={variant}/>;
-    case "chip": return <Chip/>;
-    case "tag": return <Tag/>;
-    case "kbd": return <Kbd/>;
-    case "avatar": return <Avatar variant={variant}/>;
-    case "tooltip": return <Tooltip/>;
+    case "button": content = <Button variant={variant}/>; break;
+    case "icon-button": content = <IconButton/>; break;
+    case "toggle": content = <Toggle/>; break;
+    case "button-group": content = <ButtonGroup/>; break;
+    case "split-button": content = <SplitButton/>; break;
+    case "fab": content = <FAB/>; break;
+    case "copy-button": content = <CopyButton/>; break;
+    case "link": content = <LinkP/>; break;
+    case "badge": content = <Badge variant={variant}/>; break;
+    case "chip": content = <Chip/>; break;
+    case "tag": content = <Tag/>; break;
+    case "kbd": content = <Kbd/>; break;
+    case "avatar": content = <Avatar variant={variant}/>; break;
+    case "tooltip": content = <Tooltip/>; break;
     case "popover": return <Popover/>;
     case "dropdown": return <Dropdown/>;
     case "context-menu": return <ContextMenu/>;
