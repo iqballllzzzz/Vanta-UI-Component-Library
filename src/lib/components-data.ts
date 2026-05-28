@@ -23,18 +23,23 @@ export type ComponentEntry = {
   variant?: string; // variant key passed to renderer
   description: string;
   tags: string[];
-  props?: { name: string; type: string; default?: string; description: string }[];
+  props?: { name: string; type: string; default?: string; description: string; required?: boolean }[];
   a11y?: string[];
   code?: string;
   usage?: string;
   cli?: string;
   pkg?: string;
   isNew?: boolean;
+  setup?: string;
+  styles?: string;
+  keywords?: string[];
+  docs?: string;
+  thumbnail?: string;
 };
 
 const defaultProps = [
-  { name: "className", type: "string", description: "Tailwind classes appended to the root." },
-  { name: "children", type: "ReactNode", description: "Slot content." },
+  { name: "className", type: "string", description: "Tailwind classes appended to the root.", required: false },
+  { name: "children", type: "ReactNode", description: "Slot content.", required: false },
 ];
 
 const defaultA11y = [
@@ -66,6 +71,16 @@ const make = (
   code:
     extras.code ??
     `// ${name} — Vanta UI\nexport function ${name.replace(/\s+/g, "")}(props) {\n  return (\n    /* see live preview */\n    null\n  );\n}`,
+  setup:
+    extras.setup ??
+    `import { cn } from "@/lib/utils";\nimport { motion } from "framer-motion";\n\n// Register theme tokens and component exports before using ${name.replace(/\s+/g, "")}.`,
+  styles:
+    extras.styles ??
+    `.vanta-${slugify(name)} {\n  border-radius: var(--radius-md);\n  border: 1px solid var(--hairline);\n  background: var(--canvas);\n  color: var(--ink);\n}`,
+  docs:
+    extras.docs ??
+    `${name} is a production-ready ${category.toLowerCase()} component with accessible defaults, copy-paste friendly source, and responsive behavior for light and dark themes.`,
+  keywords: extras.keywords ?? [kind, category.toLowerCase(), slugify(name), ...(extras.tags ?? [])],
   ...extras,
 });
 
