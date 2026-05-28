@@ -14,7 +14,7 @@ import {
   Quote, Wand2, Database, Code2, GitBranch, Terminal as TerminalIcon, Layers,
   Shield, Award, Flame, Rocket, Gift, ThumbsUp,
 } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 type V = string | undefined;
 
@@ -2279,7 +2279,7 @@ function ConfettiBtn() {
 
 // ---------- DISPATCH ----------
 export function Preview({ kind, variant, interactive = true }: { kind: string; variant?: string; interactive?: boolean }) {
-  let content: React.ReactNode;
+  let content: ReactNode;
   switch (kind) {
     case "button": content = <Button variant={variant}/>; break;
     case "icon-button": content = <IconButton/>; break;
