@@ -157,8 +157,10 @@ function ComponentsIndex() {
         {list.map((c) => (
           <Link key={c.slug} to="/components/$slug" params={{ slug: c.slug }} className="group block">
             <article className="border border-hairline rounded-xl overflow-hidden bg-canvas-soft transition hover:border-hairline-strong hover:-translate-y-0.5">
-              <div className="bg-canvas">
-                <Preview kind={c.kind} variant={c.variant} interactive={false} />
+              <div className="bg-canvas overflow-hidden relative h-[200px] sm:h-[240px] lg:h-[260px]">
+                <div className="absolute inset-0 origin-top-left scale-[0.62] w-[161%] h-[161%] sm:scale-[0.82] sm:w-[122%] sm:h-[122%] lg:scale-100 lg:w-full lg:h-full">
+                  <Preview kind={c.kind} variant={c.variant} interactive={false} />
+                </div>
               </div>
               <div className="p-3 space-y-2">
                 <div className="flex justify-between items-center gap-3">
