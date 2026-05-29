@@ -57,15 +57,24 @@ export function CommandMenu() {
 
   if (!open) {
     return (
-      <button
-        onClick={() => setOpen(true)}
-        className="hidden sm:inline-flex items-center gap-2 h-8 px-3 rounded-md border border-hairline bg-canvas text-sm text-mute hover:text-ink"
-        aria-label="Open search"
-      >
-        <Search className="h-4 w-4" />
-        <span>Search components…</span>
-        <kbd className="ml-6 px-1.5 py-0.5 rounded-md border border-hairline text-[10px] font-mono">⌘K</kbd>
-      </button>
+      <>
+        <button
+          onClick={() => setOpen(true)}
+          className="hidden sm:inline-flex items-center gap-2 h-8 px-3 rounded-md border border-hairline bg-canvas text-sm text-mute hover:text-ink"
+          aria-label="Open search"
+        >
+          <Search className="h-4 w-4" />
+          <span>Search components…</span>
+          <kbd className="ml-6 px-1.5 py-0.5 rounded-md border border-hairline text-[10px] font-mono">⌘K</kbd>
+        </button>
+        <button
+          onClick={() => setOpen(true)}
+          className="sm:hidden inline-flex h-8 w-8 items-center justify-center rounded-md border border-hairline bg-canvas text-mute"
+          aria-label="Open search"
+        >
+          <Search className="h-4 w-4" />
+        </button>
+      </>
     );
   }
 

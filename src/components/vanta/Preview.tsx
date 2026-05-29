@@ -18,7 +18,7 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 
 type V = string | undefined;
 
-const Stage = ({ children, h = "min-h-[280px]", pad = "p-8", className = "" }: any) => (
+const Stage = ({ children, h = "min-h-[220px] sm:min-h-[280px]", pad = "p-4 sm:p-8", className = "" }: any) => (
   <div className={`relative w-full max-w-full ${h} ${pad} flex items-center justify-center bg-canvas rounded-xl border border-hairline overflow-x-auto overflow-y-hidden ${className}`}>
     <div className="flex items-center justify-center min-w-0 max-w-full">{children}</div>
   </div>
