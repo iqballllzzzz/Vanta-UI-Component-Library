@@ -8,7 +8,7 @@ import logo from "@/assets/vanta-logo.png";
 export function Header() {
   return (
     <header className="sticky top-0 z-40 bg-canvas/80 backdrop-blur border-b border-hairline">
-      <div className="mx-auto max-w-7xl h-14 px-5 flex items-center gap-4">
+      <div className="mx-auto max-w-7xl h-14 px-3 sm:px-5 flex items-center gap-2 sm:gap-4">
         <Link to="/" className="font-medium text-ink flex items-center gap-2 group">
           <motion.img
             src={logo}
@@ -30,10 +30,10 @@ export function Header() {
           <Link to="/templates" className="px-2 py-1 rounded-full hover:bg-canvas-soft">Templates</Link>
           <Link to="/showcase" className="px-2 py-1 rounded-full hover:bg-canvas-soft">Showcase</Link>
         </nav>
-        <div className="ml-auto flex items-center gap-2">
+        <div className="ml-auto flex items-center gap-1.5 sm:gap-2">
           <CommandMenu />
           <ThemeToggle />
-          <a href="#" aria-label="GitHub" className="h-8 w-8 grid place-items-center rounded-md border border-hairline"><Github className="h-4 w-4"/></a>
+          <a href="#" aria-label="GitHub" className="hidden sm:grid h-8 w-8 place-items-center rounded-md border border-hairline"><Github className="h-4 w-4"/></a>
           <a href="#" className="hidden sm:inline-flex h-8 px-3 rounded-md bg-ink text-white text-xs items-center">Get started</a>
         </div>
       </div>
