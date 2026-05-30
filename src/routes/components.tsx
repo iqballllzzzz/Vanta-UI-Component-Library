@@ -2,6 +2,7 @@ import { createFileRoute, Link, Outlet, useRouterState } from "@tanstack/react-r
 import { useMemo, useState } from "react";
 import { COMPONENTS, CATEGORIES } from "@/lib/components-data";
 import { Preview } from "@/components/vanta/Preview";
+import { CardLink } from "@/components/vanta/CardLink";
 import { Search, SlidersHorizontal, Type, CheckCircle2, Circle } from "lucide-react";
 import { slugify } from "@/lib/slug";
 import { fuzzyMatch } from "@/lib/fuzzy";
@@ -155,7 +156,7 @@ function ComponentsIndex() {
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
         {list.map((c) => (
-          <Link key={c.slug} to="/components/$slug" params={{ slug: c.slug }} className="group block">
+          <CardLink key={c.slug} to="/components/$slug" params={{ slug: c.slug }} ariaLabel={`Open ${c.name}`} className="group block">
             <article className="border border-hairline rounded-xl overflow-hidden bg-canvas-soft transition hover:border-hairline-strong hover:-translate-y-0.5">
               <div className="bg-canvas overflow-hidden relative h-[200px] sm:h-[240px] lg:h-[260px]">
                 <div className="absolute inset-0 origin-top-left scale-[0.62] w-[161%] h-[161%] sm:scale-[0.82] sm:w-[122%] sm:h-[122%] lg:scale-100 lg:w-full lg:h-full">
@@ -181,7 +182,7 @@ function ComponentsIndex() {
                 </div>
               </div>
             </article>
-          </Link>
+          </CardLink>
         ))}
       </div>
     </div>
