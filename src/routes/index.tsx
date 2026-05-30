@@ -3,6 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { Sparkles, ArrowRight, Github } from "lucide-react";
 import { COMPONENTS, CATEGORIES, totalCount } from "@/lib/components-data";
 import { Preview } from "@/components/vanta/Preview";
+import { CardLink } from "@/components/vanta/CardLink";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -59,10 +60,12 @@ function Index() {
         </div>
         <div className="grid md:grid-cols-2 gap-4 mt-8">
           {featured.map((c) => (
-            <Link key={c.slug} to="/components/$slug" params={{ slug: c.slug }} className="group">
+            <CardLink key={c.slug} to="/components/$slug" params={{ slug: c.slug }} ariaLabel={`Open ${c.name}`} className="group">
               <div className="border border-hairline rounded-xl overflow-hidden bg-canvas-soft transition hover:border-hairline-strong">
-                <div className="bg-canvas">
-                  <Preview kind={c.kind} variant={c.variant} />
+                <div className="bg-canvas overflow-hidden relative h-[220px] sm:h-[260px] lg:h-[280px]">
+                  <div className="absolute inset-0 origin-top-left scale-[0.62] w-[161%] h-[161%] sm:scale-[0.82] sm:w-[122%] sm:h-[122%] lg:scale-100 lg:w-full lg:h-full">
+                    <Preview kind={c.kind} variant={c.variant} interactive={false} />
+                  </div>
                 </div>
                 <div className="p-4 flex justify-between items-center">
                   <div>
@@ -72,7 +75,7 @@ function Index() {
                   <span className="text-[10px] font-mono uppercase text-mute">{c.category}</span>
                 </div>
               </div>
-            </Link>
+            </CardLink>
           ))}
         </div>
       </section>
