@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { FavoriteButton } from "@/components/vanta/FavoriteButton";
 import { findComponent, COMPONENTS, THEME_TOKENS_EXPORT } from "@/lib/components-data";
 import { Preview } from "@/components/vanta/Preview";
+import { CardLink } from "@/components/vanta/CardLink";
 import {
   Copy,
   Check,
@@ -232,15 +233,19 @@ function ComponentDetail() {
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-4">
             {variants.map((v) => (
-              <Link key={v.slug} to="/components/$slug" params={{ slug: v.slug }} className="block group">
+              <CardLink key={v.slug} to="/components/$slug" params={{ slug: v.slug }} ariaLabel={`Open ${v.name}`} className="block group">
                 <div className="border border-hairline rounded-lg overflow-hidden bg-canvas hover:border-hairline-strong">
-                  <div className="scale-90 origin-center"><Preview kind={v.kind} variant={v.variant} interactive={false} /></div>
+                  <div className="overflow-hidden relative h-[180px] sm:h-[220px]">
+                    <div className="absolute inset-0 origin-top-left scale-[0.62] w-[161%] h-[161%] sm:scale-[0.82] sm:w-[122%] sm:h-[122%]">
+                      <Preview kind={v.kind} variant={v.variant} interactive={false} />
+                    </div>
+                  </div>
                   <div className="p-2.5 border-t border-hairline flex items-center justify-between">
                     <div className="text-xs font-medium text-ink">{v.name}</div>
                     <Code2 className="h-3.5 w-3.5 text-mute group-hover:text-ink" />
                   </div>
                 </div>
-              </Link>
+              </CardLink>
             ))}
           </div>
         </section>

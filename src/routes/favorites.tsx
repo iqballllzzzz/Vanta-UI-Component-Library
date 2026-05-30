@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useFavorites } from "@/hooks/use-favorites";
 import { COMPONENTS } from "@/lib/components-data";
 import { Preview } from "@/components/vanta/Preview";
+import { CardLink } from "@/components/vanta/CardLink";
 import { Bookmark } from "lucide-react";
 
 export const Route = createFileRoute("/favorites")({
@@ -35,15 +36,19 @@ function FavoritesPage() {
       ) : (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
           {items.map((c) => (
-            <Link key={c.slug} to="/components/$slug" params={{ slug: c.slug }} className="group">
+            <CardLink key={c.slug} to="/components/$slug" params={{ slug: c.slug }} ariaLabel={`Open ${c.name}`} className="group">
               <div className="border border-hairline rounded-xl overflow-hidden bg-canvas-soft hover:border-hairline-strong">
-                <div className="bg-canvas"><Preview kind={c.kind} variant={c.variant} /></div>
+                <div className="bg-canvas overflow-hidden relative h-[200px] sm:h-[240px] lg:h-[260px]">
+                  <div className="absolute inset-0 origin-top-left scale-[0.62] w-[161%] h-[161%] sm:scale-[0.82] sm:w-[122%] sm:h-[122%] lg:scale-100 lg:w-full lg:h-full">
+                    <Preview kind={c.kind} variant={c.variant} interactive={false} />
+                  </div>
+                </div>
                 <div className="p-3 flex justify-between items-center">
                   <div className="text-sm font-medium text-ink">{c.name}</div>
                   <span className="text-[10px] font-mono uppercase text-mute">{c.category}</span>
                 </div>
               </div>
-            </Link>
+            </CardLink>
           ))}
         </div>
       )}
