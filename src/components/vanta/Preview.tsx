@@ -219,7 +219,6 @@ function Toggle() {
     </Stage>
   );
 }
-}
 function ButtonGroup() {
   const [v, setV] = useState("design");
   return (
