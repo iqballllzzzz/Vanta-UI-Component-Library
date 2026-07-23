@@ -6,6 +6,7 @@ import { FavoriteButton } from "@/components/vanta/FavoriteButton";
 import { findComponent, COMPONENTS, THEME_TOKENS_EXPORT } from "@/lib/components-data";
 import { Preview } from "@/components/vanta/Preview";
 import { CardLink } from "@/components/vanta/CardLink";
+import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
 import {
   Copy,
   Check,
@@ -185,14 +186,27 @@ function ComponentDetail() {
       </div>
 
       <div className="mt-8 flex gap-6 border-b border-hairline flex-wrap">
-        {(["preview", "code"] as const).map((t) => (
-          <button key={t} onClick={() => setTab(t)} className={`pb-2 text-sm capitalize relative ${tab === t ? "text-ink" : "text-body"}`}>
-            {t}{tab === t && <span className="absolute -bottom-px left-0 right-0 h-px bg-ink" />}
-          </button>
-        ))}
+        <LayoutGroup id="detail-tabs">
+          {(["preview", "code"] as const).map((t) => (
+            <button
+              key={t}
+              onClick={() => setTab(t)}
+              className={`pb-2 text-sm capitalize relative transition-colors springy-tap ${tab === t ? "text-ink" : "text-body hover:text-ink"}`}
+            >
+              {t}
+              {tab === t && (
+                <motion.span
+                  layoutId="detail-tab-underline"
+                  className="absolute -bottom-px left-0 right-0 h-[2px] rounded-full bg-gradient-to-r from-violet via-pink to-ink"
+                  transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                />
+              )}
+            </button>
+          ))}
+        </LayoutGroup>
         <div className="ml-auto flex items-center gap-1 pb-2">
           {[["mobile", Smartphone], ["tablet", Tablet], ["desktop", Monitor]].map(([k, I]: any) => (
-            <button key={k} onClick={() => setDevice(k)} className={`h-7 w-7 grid place-items-center rounded-md ${device === k ? "bg-canvas-soft text-ink" : "text-mute hover:bg-canvas-soft"}`} aria-label={k}>
+            <button key={k} onClick={() => setDevice(k)} className={`h-7 w-7 grid place-items-center rounded-md springy-tap transition ${device === k ? "bg-canvas-soft text-ink icon-glow" : "text-mute hover:bg-canvas-soft hover:text-ink"}`} aria-label={k}>
               <I className="h-4 w-4" />
             </button>
           ))}
@@ -200,29 +214,61 @@ function ComponentDetail() {
       </div>
 
       <div className="mt-6" id="preview">
+        <AnimatePresence mode="wait">
         {tab === "preview" ? (
-          <div className="flex justify-center bg-canvas-soft border border-hairline rounded-xl p-4 sm:p-6 overflow-hidden">
-            <div className={`w-full ${deviceW[device]} transition-all max-w-full`}>
+          <motion.div
+            key="preview"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.25, ease: [0.2, 0.8, 0.2, 1] }}
+            className="relative flex justify-center bg-canvas-soft border border-hairline rounded-xl p-4 sm:p-6 overflow-hidden grid-bg"
+          >
+            <div className={`relative w-full ${deviceW[device]} transition-all max-w-full`}>
               <Preview kind={component.kind} variant={search.variant ?? component.variant} />
             </div>
-          </div>
+          </motion.div>
         ) : (
-          <section className="rounded-xl overflow-hidden border border-hairline" id="code">
+          <motion.section
+            key="code"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.25, ease: [0.2, 0.8, 0.2, 1] }}
+            className="rounded-xl overflow-hidden border border-hairline"
+            id="code"
+          >
             <div className="flex items-center gap-1 px-2 pt-2 bg-canvas-soft border-b border-hairline overflow-x-auto">
-              {(["component", "example", "styles", "setup", "usage"] as const).map((t) => (
-                <button key={t} onClick={() => setCodeTab(t)} className={`h-8 px-3 text-xs rounded-md uppercase font-mono whitespace-nowrap ${codeTab === t ? "bg-canvas text-ink border border-hairline border-b-canvas" : "text-mute"}`}>
-                  {t}
-                </button>
-              ))}
+              <LayoutGroup id="code-tabs">
+                {(["component", "example", "styles", "setup", "usage"] as const).map((t) => (
+                  <button key={t} onClick={() => setCodeTab(t)} className={`relative h-8 px-3 text-xs rounded-md uppercase font-mono whitespace-nowrap transition-colors springy-tap ${codeTab === t ? "text-ink" : "text-mute hover:text-ink"}`}>
+                    {codeTab === t && (
+                      <motion.span
+                        layoutId="code-tab-pill"
+                        className="absolute inset-0 rounded-md bg-canvas border border-hairline border-b-canvas"
+                        transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                      />
+                    )}
+                    <span className="relative">{t}</span>
+                  </button>
+                ))}
+              </LayoutGroup>
               <div className="ml-auto pr-2 pb-2"><CodeCopyButton text={codePanels[codeTab].value} label={codePanels[codeTab].name} /></div>
             </div>
             <div className="flex items-center justify-between px-3 py-2 bg-canvas-soft/50 border-b border-hairline">
               <div className="text-xs font-mono text-mute">{codePanels[codeTab].name}</div>
               <div className="text-[11px] text-body">Copy per bagian atau copy bundle penuh.</div>
             </div>
-            <pre className="bg-ink text-white p-4 font-mono text-xs overflow-auto"><code>{codePanels[codeTab].value}</code></pre>
-          </section>
+            <motion.pre
+              key={codeTab}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.2 }}
+              className="bg-ink text-white p-4 font-mono text-xs overflow-auto"
+            ><code>{codePanels[codeTab].value}</code></motion.pre>
+          </motion.section>
         )}
+        </AnimatePresence>
       </div>
 
       {variants.length > 0 && (
@@ -233,7 +279,7 @@ function ComponentDetail() {
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-4">
             {variants.map((v) => (
-              <CardLink key={v.slug} to="/components/$slug" params={{ slug: v.slug }} ariaLabel={`Open ${v.name}`} className="block group">
+              <CardLink key={v.slug} to="/components/$slug" params={{ slug: v.slug }} ariaLabel={`Open ${v.name}`} className="block group magnetic-card shine-sweep rounded-lg">
                 <div className="border border-hairline rounded-lg overflow-hidden bg-canvas hover:border-hairline-strong">
                   <div className="overflow-hidden relative h-[180px] sm:h-[220px]">
                     <div className="absolute inset-0 origin-top-left scale-[0.62] w-[161%] h-[161%] sm:scale-[0.82] sm:w-[122%] sm:h-[122%]">
@@ -242,7 +288,7 @@ function ComponentDetail() {
                   </div>
                   <div className="p-2.5 border-t border-hairline flex items-center justify-between">
                     <div className="text-xs font-medium text-ink">{v.name}</div>
-                    <Code2 className="h-3.5 w-3.5 text-mute group-hover:text-ink" />
+                    <Code2 className="h-3.5 w-3.5 text-mute group-hover:text-ink icon-hover-spin" />
                   </div>
                 </div>
               </CardLink>
@@ -333,7 +379,7 @@ function ComponentDetail() {
         <h2 className="text-xl font-medium">Related</h2>
         <div className="grid md:grid-cols-2 gap-3 mt-4">
           {related.map((r) => (
-            <Link key={r.slug} to="/components/$slug" params={{ slug: r.slug }} className="border border-hairline rounded-lg p-3 hover:bg-canvas-soft">
+            <Link key={r.slug} to="/components/$slug" params={{ slug: r.slug }} className="magnetic-card shine-sweep border border-hairline rounded-lg p-3 hover:bg-canvas-soft block">
               <div className="text-sm font-medium text-ink">{r.name}</div>
               <div className="text-xs text-mute">{r.description}</div>
             </Link>
