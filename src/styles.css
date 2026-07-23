@@ -185,6 +185,63 @@ html, body { overflow-x: hidden; max-width: 100vw; }
   .float { animation: float 3.5s ease-in-out infinite; }
   @keyframes spin-slow { to { transform: rotate(360deg); } }
   .spin-slow { animation: spin-slow 8s linear infinite; }
+
+  /* ============ Premium microinteractions ============ */
+  .shine-sweep { position: relative; overflow: hidden; isolation: isolate; }
+  .shine-sweep::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.35) 50%, transparent 70%);
+    transform: translateX(-120%) skewX(-12deg); transition: transform .9s cubic-bezier(.2,.8,.2,1);
+  }
+  .shine-sweep:hover::after { transform: translateX(120%) skewX(-12deg); }
+
+  .springy-tap { transition: transform .18s cubic-bezier(.2,.8,.2,1); }
+  .springy-tap:active { transform: scale(0.97); }
+
+  .magnetic-card {
+    position: relative; transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s ease, border-color .35s ease;
+    will-change: transform;
+  }
+  .magnetic-card:hover {
+    transform: translateY(-3px);
+    box-shadow:
+      0 1px 0 0 color-mix(in oklab, var(--ink) 6%, transparent),
+      0 20px 40px -24px color-mix(in oklab, #7928ca 35%, transparent),
+      0 10px 30px -20px color-mix(in oklab, #ff0080 25%, transparent);
+  }
+
+  .icon-glow { filter: drop-shadow(0 0 8px color-mix(in oklab, currentColor 45%, transparent)); }
+  .icon-3d {
+    filter:
+      drop-shadow(0 1px 0 color-mix(in oklab, var(--ink) 20%, transparent))
+      drop-shadow(0 6px 10px color-mix(in oklab, #7928ca 25%, transparent));
+  }
+  .icon-hover-spin { transition: transform .4s cubic-bezier(.2,.8,.2,1); }
+  .group:hover .icon-hover-spin { transform: rotate(12deg) scale(1.08); }
+  .icon-hover-bounce { transition: transform .3s cubic-bezier(.2,.8,.2,1); }
+  .group:hover .icon-hover-bounce { transform: translateY(-2px) scale(1.06); }
+
+  .conic-ring { position: relative; }
+  .conic-ring::before {
+    content: ""; position: absolute; inset: -1px; border-radius: inherit; padding: 1px;
+    background: conic-gradient(from 0deg, #7928ca, #ff0080, #f9cb28, #00dfd8, #7928ca);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor; mask-composite: exclude; opacity: 0; transition: opacity .3s ease;
+    animation: spin-slow 6s linear infinite;
+  }
+  .conic-ring:hover::before, .conic-ring[data-active="true"]::before { opacity: 1; }
+
+  .glass {
+    background: color-mix(in oklab, var(--canvas) 70%, transparent);
+    backdrop-filter: blur(14px) saturate(1.2);
+    -webkit-backdrop-filter: blur(14px) saturate(1.2);
+    border: 1px solid color-mix(in oklab, var(--ink) 8%, transparent);
+  }
+
+  @media (hover: none) {
+    .magnetic-card:hover { transform: none; }
+    .shine-sweep::after { display: none; }
+  }
 }
 
 @font-face {
