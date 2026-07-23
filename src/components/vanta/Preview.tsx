@@ -24,10 +24,57 @@ const Stage = ({ children, h = "min-h-[220px] sm:min-h-[280px]", pad = "p-4 sm:p
   </div>
 );
 
+// ---------- Premium primitives (Shine, Glow, Magnetic) ----------
+function Shine({ className = "" }: { className?: string }) {
+  return (
+    <span
+      aria-hidden
+      className={`pointer-events-none absolute inset-0 overflow-hidden rounded-[inherit] ${className}`}
+    >
+      <span className="absolute inset-y-0 -left-1/2 w-1/2 -skew-x-12 bg-gradient-to-r from-transparent via-white/40 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-hover:animate-[shineSweep_1.2s_ease-out]" />
+    </span>
+  );
+}
+function ConicRing({ className = "", from = "#7928ca", via = "#ff0080", to = "#00dfd8" }: any) {
+  return (
+    <span
+      aria-hidden
+      className={`pointer-events-none absolute -inset-px rounded-[inherit] opacity-70 blur-[1px] ${className}`}
+      style={{ background: `conic-gradient(from 0deg, ${from}, ${via}, ${to}, ${from})`, WebkitMask: "linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)", WebkitMaskComposite: "xor", maskComposite: "exclude", padding: 1 }}
+    />
+  );
+}
+function Magnetic({ children, strength = 0.25, className = "" }: { children: ReactNode; strength?: number; className?: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const [t, setT] = useState({ x: 0, y: 0 });
+  return (
+    <span
+      ref={ref}
+      className={`inline-block will-change-transform ${className}`}
+      style={{ transform: `translate3d(${t.x}px, ${t.y}px, 0)`, transition: "transform 220ms cubic-bezier(.2,.8,.2,1)" }}
+      onPointerMove={(e) => {
+        const r = ref.current?.getBoundingClientRect(); if (!r) return;
+        setT({ x: (e.clientX - (r.left + r.width / 2)) * strength, y: (e.clientY - (r.top + r.height / 2)) * strength });
+      }}
+      onPointerLeave={() => setT({ x: 0, y: 0 })}
+    >
+      {children}
+    </span>
+  );
+}
+
 // ---------- BUTTON ----------
 function Button({ variant }: { variant: V }) {
   const Btn = ({ children, className = "", ...p }: any) => (
-    <button className={`inline-flex items-center justify-center gap-2 transition active:scale-[0.98] ${className}`} {...p}>{children}</button>
+    <motion.button
+      whileHover={{ y: -1 }}
+      whileTap={{ scale: 0.97 }}
+      transition={{ type: "spring", stiffness: 380, damping: 22 }}
+      className={`group relative inline-flex items-center justify-center gap-2 overflow-hidden ${className}`}
+      {...p}
+    >
+      {children}
+    </motion.button>
   );
   if (variant === "sizes") {
     return (
@@ -39,25 +86,91 @@ function Button({ variant }: { variant: V }) {
             ["lg", "h-11 px-5 text-sm"],
             ["xl", "h-12 px-6 text-base"],
           ].map(([k, c]) => (
-            <Btn key={k} className={`rounded-full bg-ink text-white hover:bg-ink/90 ${c}`}>Button {k}</Btn>
+            <Btn key={k} className={`rounded-full bg-ink text-white shadow-[0_10px_30px_-10px_rgba(0,0,0,0.6)] hover:shadow-[0_18px_40px_-15px_rgba(0,0,0,0.7)] ${c}`}>
+              <Shine /><span className="relative z-10">Button {k}</span>
+            </Btn>
           ))}
         </div>
       </Stage>
     );
   }
   if (variant === "loading")
-    return <Stage><Btn className="rounded-full bg-ink text-white h-10 px-5 text-sm"><Loader2 className="h-4 w-4 animate-spin" />Processing</Btn></Stage>;
+    return (
+      <Stage>
+        <Btn className="rounded-full bg-ink text-white h-10 px-5 text-sm shadow-[0_10px_30px_-10px_rgba(0,0,0,0.6)]">
+          <Shine />
+          <Loader2 className="h-4 w-4 animate-spin relative z-10" />
+          <span className="relative z-10">Processing</span>
+          <span className="absolute inset-x-4 bottom-1 h-px bg-gradient-to-r from-transparent via-white/50 to-transparent" />
+        </Btn>
+      </Stage>
+    );
   if (variant === "destructive")
-    return <Stage><Btn className="rounded-full bg-[#ee0000] text-white h-10 px-5 text-sm">Delete account</Btn></Stage>;
+    return (
+      <Stage>
+        <Btn className="rounded-full bg-[#ee0000] text-white h-10 px-5 text-sm shadow-[0_18px_40px_-14px_rgba(238,0,0,0.55)] hover:shadow-[0_22px_50px_-14px_rgba(238,0,0,0.7)]">
+          <span className="absolute inset-0 rounded-full bg-gradient-to-b from-white/20 to-transparent" />
+          <Shine />
+          <Trash2 className="h-4 w-4 relative z-10" />
+          <span className="relative z-10">Delete account</span>
+        </Btn>
+      </Stage>
+    );
   if (variant === "gradient")
-    return <Stage><Btn className="rounded-full h-11 px-6 text-sm text-white font-medium" style={{ backgroundImage: "linear-gradient(90deg,#7928ca,#ff0080)" }}><Sparkles className="h-4 w-4" />Deploy with Vanta</Btn></Stage>;
+    return (
+      <Stage>
+        <Magnetic>
+          <Btn className="rounded-full h-11 px-6 text-sm text-white font-medium shadow-[0_20px_50px_-14px_rgba(121,40,202,0.55)]" style={{ backgroundImage: "linear-gradient(115deg,#7928ca,#ff0080 60%,#f5a623)" }}>
+            <ConicRing />
+            <Shine />
+            <Sparkles className="h-4 w-4 relative z-10" />
+            <span className="relative z-10">Deploy with Vanta</span>
+          </Btn>
+        </Magnetic>
+      </Stage>
+    );
   if (variant === "link")
-    return <Stage><a className="text-link inline-flex items-center gap-1 text-sm hover:underline">Read documentation <ArrowRight className="h-4 w-4" /></a></Stage>;
+    return (
+      <Stage>
+        <a className="group text-link inline-flex items-center gap-1 text-sm relative">
+          <span className="relative">
+            Read documentation
+            <span className="absolute left-0 -bottom-0.5 h-px w-full origin-left scale-x-0 bg-current transition-transform duration-500 group-hover:scale-x-100" />
+          </span>
+          <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+        </a>
+      </Stage>
+    );
   if (variant === "ghost")
-    return <Stage><Btn className="rounded-full h-9 px-4 text-sm text-ink hover:bg-canvas-soft">Cancel</Btn></Stage>;
+    return (
+      <Stage>
+        <Btn className="rounded-full h-9 px-4 text-sm text-ink hover:bg-canvas-soft border border-transparent hover:border-hairline">
+          <span className="relative z-10">Cancel</span>
+        </Btn>
+      </Stage>
+    );
   if (variant === "secondary")
-    return <Stage><Btn className="rounded-full h-10 px-5 text-sm bg-canvas text-ink border border-hairline hover:bg-canvas-soft">Continue</Btn></Stage>;
-  return <Stage><Btn className="rounded-full h-10 px-5 text-sm bg-ink text-white hover:bg-ink/90">Deploy now</Btn></Stage>;
+    return (
+      <Stage>
+        <Btn className="rounded-full h-10 px-5 text-sm bg-canvas text-ink border border-hairline hover:bg-canvas-soft hover:border-hairline-strong shadow-[0_1px_0_rgba(0,0,0,0.02),0_10px_30px_-16px_rgba(0,0,0,0.35)]">
+          <Shine />
+          <span className="relative z-10">Continue</span>
+          <ArrowRight className="h-4 w-4 relative z-10 transition-transform duration-300 group-hover:translate-x-0.5" />
+        </Btn>
+      </Stage>
+    );
+  return (
+    <Stage>
+      <Magnetic>
+        <Btn className="rounded-full h-11 px-6 text-sm bg-ink text-white shadow-[0_20px_45px_-15px_rgba(0,0,0,0.65)] hover:shadow-[0_25px_55px_-15px_rgba(0,0,0,0.8)]">
+          <span className="absolute inset-0 rounded-full bg-gradient-to-b from-white/15 to-transparent opacity-80" />
+          <Shine />
+          <Rocket className="h-4 w-4 relative z-10" />
+          <span className="relative z-10">Deploy now</span>
+        </Btn>
+      </Magnetic>
+    </Stage>
+  );
 }
 
 // ---------- ICON BUTTON / TOGGLE / GROUP / SPLIT / FAB / COPY / LINK ----------
@@ -66,9 +179,17 @@ function IconButton() {
     <Stage>
       <div className="flex gap-3">
         {[Settings, Bell, Heart, Star].map((I, i) => (
-          <button key={i} className="h-9 w-9 grid place-items-center rounded-md border border-hairline hover:bg-canvas-soft text-ink">
-            <I className="h-4 w-4" />
-          </button>
+          <motion.button
+            key={i}
+            whileHover={{ y: -2, rotate: [-2, 2, 0][i % 3] }}
+            whileTap={{ scale: 0.9 }}
+            transition={{ type: "spring", stiffness: 400, damping: 18 }}
+            className="group relative h-10 w-10 grid place-items-center rounded-xl border border-hairline bg-canvas text-ink overflow-hidden shadow-[0_1px_0_rgba(0,0,0,0.03),0_10px_25px_-15px_rgba(0,0,0,0.4)] hover:border-hairline-strong"
+          >
+            <span className="absolute inset-0 bg-gradient-to-br from-canvas-soft to-transparent opacity-0 group-hover:opacity-100 transition" />
+            <span className="absolute -inset-4 rounded-full opacity-0 group-hover:opacity-60 blur-2xl transition" style={{ background: ["#7928ca55","#00dfd855","#ff008055","#f5a62355"][i] }} />
+            <I className="h-4 w-4 relative z-10 transition-transform duration-300 group-hover:scale-110" />
+          </motion.button>
         ))}
       </div>
     </Stage>
@@ -76,7 +197,28 @@ function IconButton() {
 }
 function Toggle() {
   const [on, setOn] = useState(true);
-  return <Stage><button onClick={() => setOn(!on)} className={`h-9 px-4 rounded-md text-sm border ${on ? "bg-ink text-white border-ink" : "bg-canvas text-ink border-hairline"}`}>{on ? "Following" : "Follow"}</button></Stage>;
+  return (
+    <Stage>
+      <motion.button
+        onClick={() => setOn(!on)}
+        whileTap={{ scale: 0.94 }}
+        className={`relative h-9 px-5 rounded-full text-sm border overflow-hidden transition-colors ${on ? "bg-ink text-white border-ink" : "bg-canvas text-ink border-hairline hover:border-hairline-strong"}`}
+      >
+        <motion.span
+          key={String(on)}
+          initial={{ y: 12, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ type: "spring", stiffness: 380, damping: 26 }}
+          className="relative z-10 inline-flex items-center gap-1.5"
+        >
+          {on && <Check className="h-3.5 w-3.5" />}
+          {on ? "Following" : "Follow"}
+        </motion.span>
+        {on && <span className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent" />}
+      </motion.button>
+    </Stage>
+  );
+}
 }
 function ButtonGroup() {
   const [v, setV] = useState("design");
@@ -103,9 +245,17 @@ function SplitButton() {
 function FAB() {
   return (
     <Stage>
-      <button className="h-14 w-14 rounded-full bg-ink text-white grid place-items-center shadow-lg float">
-        <Plus className="h-6 w-6" />
-      </button>
+      <motion.button
+        whileHover={{ scale: 1.08 }}
+        whileTap={{ scale: 0.92, rotate: 90 }}
+        transition={{ type: "spring", stiffness: 300, damping: 18 }}
+        className="relative h-16 w-16 rounded-full text-white grid place-items-center float overflow-hidden"
+        style={{ background: "radial-gradient(120% 120% at 30% 20%, #ff0080 0%, #7928ca 55%, #0a0a0a 100%)", boxShadow: "0 20px 45px -12px rgba(121,40,202,0.6), 0 8px 20px -8px rgba(255,0,128,0.5)" }}
+      >
+        <span className="absolute inset-0 rounded-full bg-gradient-to-b from-white/25 to-transparent" />
+        <span className="absolute -inset-1 rounded-full opacity-70 animate-[spin-slow_6s_linear_infinite]" style={{ background: "conic-gradient(from 0deg, transparent, #ffffff55, transparent 40%)" }} />
+        <Plus className="h-6 w-6 relative z-10" />
+      </motion.button>
     </Stage>
   );
 }
@@ -113,9 +263,22 @@ function CopyButton() {
   const [copied, setCopied] = useState(false);
   return (
     <Stage>
-      <button onClick={() => { setCopied(true); setTimeout(() => setCopied(false), 1200); }} className="inline-flex items-center gap-2 h-9 px-4 rounded-md border border-hairline bg-canvas text-sm">
-        {copied ? <><Check className="h-4 w-4 text-success" />Copied</> : <><Copy className="h-4 w-4" />Copy code</>}
-      </button>
+      <motion.button
+        onClick={() => { setCopied(true); setTimeout(() => setCopied(false), 1200); }}
+        whileTap={{ scale: 0.95 }}
+        className="group relative inline-flex items-center gap-2 h-10 px-4 rounded-lg border border-hairline bg-canvas text-sm overflow-hidden hover:border-hairline-strong shadow-[0_1px_0_rgba(0,0,0,0.03)]"
+      >
+        <Shine />
+        <motion.span
+          key={copied ? "y" : "n"}
+          initial={{ y: 8, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ type: "spring", stiffness: 400, damping: 24 }}
+          className="relative z-10 inline-flex items-center gap-2"
+        >
+          {copied ? <><Check className="h-4 w-4 text-success" /> Copied</> : <><Copy className="h-4 w-4" /> Copy code</>}
+        </motion.span>
+      </motion.button>
     </Stage>
   );
 }
@@ -125,14 +288,38 @@ function LinkP() {
 
 // ---------- BADGE / CHIP / TAG / KBD ----------
 function Badge({ variant }: { variant: V }) {
-  const wrap = "inline-flex items-center gap-1 px-2 py-0.5 text-xs";
-  if (variant === "solid") return <Stage><span className={`${wrap} rounded-full bg-ink text-white`}>Production</span></Stage>;
-  if (variant === "outline") return <Stage><span className={`${wrap} rounded-full border border-hairline text-ink`}>Beta</span></Stage>;
-  if (variant === "status") return <Stage><span className={`${wrap} rounded-full bg-canvas-soft text-body`}><span className="h-1.5 w-1.5 rounded-full bg-success" />Operational</span></Stage>;
-  if (variant === "gradient") return <Stage><span className={`${wrap} rounded-full text-white font-medium`} style={{ backgroundImage: "linear-gradient(90deg,#007cf0,#00dfd8)" }}>New release</span></Stage>;
-  if (variant === "counter") return <Stage><span className={`${wrap} rounded-full bg-[#ee0000] text-white tabular-nums px-2`}>12</span></Stage>;
-  if (variant === "pill") return <Stage><span className={`${wrap} rounded-full bg-canvas-soft text-body px-3`}>Vanta UI v1.0 →</span></Stage>;
-  return <Stage><span className={`${wrap} rounded-full bg-canvas-soft text-body`}>Default</span></Stage>;
+  const wrap = "group relative inline-flex items-center gap-1.5 px-2.5 py-1 text-xs overflow-hidden";
+  if (variant === "solid") return <Stage><span className={`${wrap} rounded-full bg-ink text-white shadow-[0_8px_20px_-10px_rgba(0,0,0,0.5)]`}><Shine /><span className="relative z-10">Production</span></span></Stage>;
+  if (variant === "outline") return <Stage><span className={`${wrap} rounded-full border border-hairline text-ink bg-canvas`}><Sparkles className="h-3 w-3 text-link relative z-10" /><span className="relative z-10">Beta</span></span></Stage>;
+  if (variant === "status") return (
+    <Stage><span className={`${wrap} rounded-full bg-canvas-soft text-body border border-hairline`}>
+      <span className="relative flex h-2 w-2"><span className="absolute inset-0 rounded-full bg-success/40 animate-ping" /><span className="relative h-2 w-2 rounded-full bg-success" /></span>
+      <span className="relative z-10">Operational</span>
+    </span></Stage>
+  );
+  if (variant === "gradient") return (
+    <Stage>
+      <span className={`${wrap} rounded-full text-white font-medium shadow-[0_14px_30px_-12px_rgba(0,124,240,0.55)]`} style={{ backgroundImage: "linear-gradient(115deg,#007cf0,#00dfd8 55%,#7928ca)" }}>
+        <ConicRing from="#007cf0" via="#00dfd8" to="#7928ca" />
+        <Shine />
+        <Rocket className="h-3 w-3 relative z-10" />
+        <span className="relative z-10">New release</span>
+      </span>
+    </Stage>
+  );
+  if (variant === "counter") return (
+    <Stage>
+      <span className="relative inline-flex">
+        <Bell className="h-6 w-6 text-ink" />
+        <motion.span
+          initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring", stiffness: 500, damping: 18, delay: 0.2 }}
+          className="absolute -top-1 -right-1 h-4 min-w-4 px-1 rounded-full bg-[#ee0000] text-white text-[10px] font-medium grid place-items-center tabular-nums shadow-[0_4px_10px_-2px_rgba(238,0,0,0.6)]"
+        >12</motion.span>
+      </span>
+    </Stage>
+  );
+  if (variant === "pill") return <Stage><span className={`${wrap} rounded-full bg-canvas-soft text-body px-3 border border-hairline hover:border-hairline-strong transition-colors`}><Sparkles className="h-3 w-3 relative z-10" /><span className="relative z-10">Vanta UI v1.0</span><ArrowRight className="h-3 w-3 relative z-10 transition-transform group-hover:translate-x-0.5" /></span></Stage>;
+  return <Stage><span className={`${wrap} rounded-full bg-canvas-soft text-body`}><span className="relative z-10">Default</span></span></Stage>;
 }
 function Chip() {
   const [tags, setTags] = useState(["react", "tailwind", "typescript"]);
@@ -705,11 +892,27 @@ function Skeleton() {
   );
 }
 function Loader({ variant }: { variant: V }) {
-  if (variant === "ring") return <Stage><Loader2 className="h-8 w-8 animate-spin text-ink" /></Stage>;
+  if (variant === "ring") return (
+    <Stage>
+      <div className="relative h-14 w-14">
+        <span className="absolute inset-0 rounded-full border-2 border-hairline" />
+        <motion.span className="absolute inset-0 rounded-full border-2 border-transparent" style={{ borderTopColor: "#7928ca", borderRightColor: "#ff0080" }} animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: "linear" }} />
+        <motion.span className="absolute inset-2 rounded-full border-2 border-transparent" style={{ borderTopColor: "#00dfd8" }} animate={{ rotate: -360 }} transition={{ repeat: Infinity, duration: 1.4, ease: "linear" }} />
+      </div>
+    </Stage>
+  );
   return (
     <Stage>
-      <div className="flex gap-1">
-        {[0,1,2].map((i) => <motion.span key={i} animate={{y:[0,-6,0]}} transition={{repeat:Infinity,duration:0.9,delay:i*0.15}} className="h-2 w-2 rounded-full bg-ink"/>)}
+      <div className="flex gap-1.5">
+        {[0,1,2,3].map((i) => (
+          <motion.span
+            key={i}
+            animate={{ y: [0, -10, 0], scale: [1, 1.15, 1] }}
+            transition={{ repeat: Infinity, duration: 1.0, delay: i * 0.12, ease: [0.4, 0, 0.2, 1] }}
+            className="h-2.5 w-2.5 rounded-full"
+            style={{ background: ["#7928ca","#ff0080","#00dfd8","#f5a623"][i] }}
+          />
+        ))}
       </div>
     </Stage>
   );
@@ -816,8 +1019,19 @@ function Switch() {
   const [on, setOn] = useState(true);
   return (
     <Stage>
-      <button onClick={()=>setOn(!on)} className={`h-6 w-10 rounded-full transition relative ${on?"bg-ink":"bg-hairline-strong"}`}>
-        <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-white transition ${on?"left-[18px]":"left-0.5"}`} />
+      <button
+        onClick={() => setOn(!on)}
+        className={`relative h-7 w-12 rounded-full transition-colors overflow-hidden ${on ? "bg-ink" : "bg-hairline-strong"}`}
+        style={ on ? { boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.08), 0 10px 24px -10px rgba(0,0,0,0.6)" } : undefined }
+      >
+        <span className={`absolute inset-0 rounded-full transition-opacity ${on ? "opacity-100" : "opacity-0"}`} style={{ backgroundImage: "linear-gradient(120deg,#7928ca,#ff0080 55%,#f5a623)" }} />
+        <motion.span
+          layout
+          transition={{ type: "spring", stiffness: 500, damping: 30 }}
+          className={`absolute top-0.5 h-6 w-6 rounded-full bg-white grid place-items-center shadow-[0_2px_8px_rgba(0,0,0,0.25)] ${on ? "left-[22px]" : "left-0.5"}`}
+        >
+          {on ? <Check className="h-3 w-3 text-ink" /> : <X className="h-3 w-3 text-mute" />}
+        </motion.span>
       </button>
     </Stage>
   );
